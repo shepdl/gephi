@@ -1225,5 +1225,7 @@
         <module>modules/WorkspaceUI</module>
         <module>modules/CoreLibraryWrapper</module>
         <module>modules/UILibraryWrapper</module>
+        <module>modules/FiltersAPI</module>
+        <module>modules/FiltersImpl</module>
     </modules>
 </project>

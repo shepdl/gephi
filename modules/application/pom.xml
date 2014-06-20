@@ -309,11 +309,11 @@
         <!--        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>filters-api</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>clustering-api</artifactId>
-        </dependency>-->
+        </dependency>
         <!--        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ui-propertyeditor</artifactId>
@@ -346,6 +346,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>desktop-datalab</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>filters-plugin</artifactId>
@@ -353,7 +354,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>filters-impl</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>export-plugin-ui</artifactId>
@@ -382,10 +383,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>desktop-perspective</artifactId>
         </dependency>
-        <!--        <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>filters-plugin-ui</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>datalab-plugin</artifactId>
@@ -413,7 +415,8 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>appearance-plugin-ui</artifactId>
-        </dependency><!--
+        </dependency>
+        <!-- -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>desktop-tools</artifactId>
@@ -421,19 +424,22 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>desktop-timeline</artifactId>
-        </dependency>-->
+        </dependency>
+        <!-- -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>directory-chooser</artifactId>
         </dependency>
-        <!--        <dependency>
+        <!--         -->
+<dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>desktop-filters</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>clustering-plugin</artifactId>
-        </dependency>-->
+        </dependency>
+        <!-- -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core-library-wrapper</artifactId>

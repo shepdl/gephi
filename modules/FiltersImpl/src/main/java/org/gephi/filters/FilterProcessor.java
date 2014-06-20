@@ -104,8 +104,8 @@ public class FilterProcessor {
                 } else if (filter instanceof EdgeFilter) {
                     processEdgeFilter((EdgeFilter) filter, input[0]);
                     q.setResult(input[0]);
-                } else if (filter instanceof AttributableFilter) {
-                    processAttributableFilter((AttributableFilter) filter, input[0]);
+                } else if (filter instanceof ElementFilter) {
+                    processAttributableFilter((ElementFilter) filter, input[0]);
                     q.setResult(input[0]);
                 } else if (filter instanceof ComplexFilter) {
                     ComplexFilter cf = (ComplexFilter) filter;
@@ -127,8 +127,8 @@ public class FilterProcessor {
         return finalResult;
     }
 
-    private void processAttributableFilter(AttributableFilter attributableFilter, Graph graph) {
-        if (((AttributableFilter) attributableFilter).getType().equals(AttributableFilter.Type.NODE)) {
+    private void processAttributableFilter(ElementFilter attributableFilter, Graph graph) {
+        if (((ElementFilter) attributableFilter).getType().equals(ElementFilter.Type.NODE)) {
             if (init(attributableFilter, graph)) {
                 List<Node> nodesToRemove = new ArrayList<Node>();
                 for (Node n : graph.getNodes()) {
@@ -221,7 +221,7 @@ public class FilterProcessor {
             if (q instanceof OperatorQueryImpl && q.getChildrenCount() > 0) {
                 boolean canSimplify = true;
                 for (AbstractQueryImpl child : q.children) {
-                    if (child.getChildrenCount() > 0 || !(child.getFilter() instanceof NodeFilter || child.getFilter() instanceof EdgeFilter || child.getFilter() instanceof AttributableFilter)) {
+                    if (child.getChildrenCount() > 0 || !(child.getFilter() instanceof NodeFilter || child.getFilter() instanceof EdgeFilter || child.getFilter() instanceof ElementFilter)) {
                         canSimplify = false;
                     }
                 }
@@ -257,7 +257,7 @@ public class FilterProcessor {
         } else if (filter instanceof EdgeFilter) {
             res = ((EdgeFilter) filter).init(graph);
         } else if (filter instanceof NodeFilter) {
-            res = ((AttributableFilter) filter).init(graph);
+            res = ((ElementFilter) filter).init(graph);
         }
 
         //Range

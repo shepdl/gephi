@@ -41,7 +41,7 @@ Portions Copyrighted 2011 Gephi Consortium.
 */
 package org.gephi.filters.spi;
 
-import org.gephi.graph.api.Attributable;
+import org.gephi.graph.api.Element;
 import org.gephi.graph.api.Graph;
 
 /**
@@ -55,7 +55,7 @@ import org.gephi.graph.api.Graph;
  * 
  * @author Mathieu Bastian
  */
-public interface AttributableFilter extends Filter {
+public interface ElementFilter extends Filter {
 
     public enum Type {
 
@@ -64,7 +64,7 @@ public interface AttributableFilter extends Filter {
 
     public boolean init(Graph graph);
 
-    public boolean evaluate(Graph graph, Attributable attributable);
+    public boolean evaluate(Graph graph, Element attributable);
 
     public void finish();
 
