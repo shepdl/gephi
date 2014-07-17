@@ -156,7 +156,7 @@ public class FilterLibraryImpl implements FilterLibrary {
         }
 
         public boolean isValid() {
-            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             return graphModel.isHierarchical();
         }
     }

@@ -145,7 +145,7 @@ public class FilterThread extends Thread {
 
     private void filter(AbstractQueryImpl query) {
         FilterProcessor processor = new FilterProcessor();
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         Graph result = processor.process((AbstractQueryImpl) query, graphModel);
 //        System.out.println("#Nodes: " + result.getNodeCount());
 //        System.out.println("#Edges: " + result.getEdgeCount());
@@ -164,7 +164,7 @@ public class FilterThread extends Thread {
 
     private void select(AbstractQueryImpl query) {
         FilterProcessor processor = new FilterProcessor();
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         Graph result = processor.process((AbstractQueryImpl) query, graphModel);
 //        System.out.println("#Nodes: " + result.getNodeCount());
 //        System.out.println("#Edges: " + result.getEdgeCount());

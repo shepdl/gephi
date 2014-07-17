@@ -82,7 +82,7 @@ public class FilterModelImpl implements FilterModel {
         listeners = new ArrayList<ChangeListener>();
         autoRefresh = true;
 
-        graphModel = Lookup.getDefault().lookup(GraphController.class).getModel(workspace);
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
         autoRefreshor = new FilterAutoRefreshor(this, graphModel);
     }
 

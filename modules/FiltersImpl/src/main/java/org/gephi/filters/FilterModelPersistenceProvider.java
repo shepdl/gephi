@@ -209,7 +209,7 @@ public class FilterModelPersistenceProvider implements WorkspacePersistenceProvi
         if (model != null && model.getGraphModel() != null) {
             graph = model.getGraphModel().getGraph();
         } else {
-            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             graph = graphModel.getGraph();
         }
 
