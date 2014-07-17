@@ -415,4 +415,14 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             callback.setValue(value);
         }
     }
+
+    @Override
+    public FilterModel getModel() {
+        return model;
+    }
+
+    @Override
+    public FilterModel getModel(Workspace workspace) {
+        return model;
+    }
 }
