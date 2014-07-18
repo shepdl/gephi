@@ -143,28 +143,18 @@ public class FilterProcessor {
                 elementFilter.finish();
             }
         } else {
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
             if (init(elementFilter, graph)) {
                 List<Edge> edgesToRemove = new ArrayList<Edge>();
-                for (Edge e : hgraph.getEdges()) {
-                    if (!elementFilter.evaluate(hgraph, e)) {
+                for (Edge e : graph.getEdges()) {
+                    if (!elementFilter.evaluate(graph, e)) {
                         edgesToRemove.add(e);
                     }
                 }
 
                 for (Edge e : edgesToRemove) {
-                    hgraph.removeEdge(e);
+                    graph.removeEdge(e);
                 }
                 edgesToRemove.clear();
-
-                for (Edge e : hgraph.getMetaEdges()) {
-                    if (!elementFilter.evaluate(hgraph, e)) {
-                        edgesToRemove.add(e);
-                    }
-                }
-                for (Edge e : edgesToRemove) {
-                    hgraph.removeMetaEdge(e);
-                }
 
                 elementFilter.finish();
             }
@@ -188,28 +178,18 @@ public class FilterProcessor {
     }
 
     private void processEdgeFilter(EdgeFilter edgeFilter, Graph graph) {
-        HierarchicalGraph hgraph = (HierarchicalGraph) graph;
         if (init(edgeFilter, graph)) {
             List<Edge> edgesToRemove = new ArrayList<Edge>();
-            for (Edge e : hgraph.getEdges()) {
-                if (!edgeFilter.evaluate(hgraph, e)) {
+            for (Edge e : graph.getEdges()) {
+                if (!edgeFilter.evaluate(graph, e)) {
                     edgesToRemove.add(e);
                 }
             }
 
             for (Edge e : edgesToRemove) {
-                hgraph.removeEdge(e);
+                graph.removeEdge(e);
             }
             edgesToRemove.clear();
-
-            for (Edge e : hgraph.getMetaEdges()) {
-                if (!edgeFilter.evaluate(hgraph, e)) {
-                    edgesToRemove.add(e);
-                }
-            }
-            for (Edge e : edgesToRemove) {
-                hgraph.removeMetaEdge(e);
-            }
 
             edgeFilter.finish();
         }
