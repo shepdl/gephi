@@ -80,14 +80,6 @@ public interface FilterLibrary extends Lookup.Provider {
             null);
 
     /**
-     * Default <code>Category</code> for filters working on the graph hierarchy.
-     */
-    public final static Category GRAPH = new Category(
-            NbBundle.getMessage(FilterLibrary.class, "FiltersLibrary.Category.Graph"),
-            null,
-            TOPOLOGY);
-
-    /**
      * Default <code>Category</code> for filters working on edges only.
      */
     public final static Category EDGE = new Category(

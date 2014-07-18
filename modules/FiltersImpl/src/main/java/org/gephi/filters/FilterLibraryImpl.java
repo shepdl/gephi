@@ -81,8 +81,6 @@ public class FilterLibraryImpl implements FilterLibrary {
         for (CategoryBuilder catBuilder : Lookup.getDefault().lookupAll(CategoryBuilder.class)) {
             content.add(catBuilder);
         }
-
-        content.add(new HierarchicalGraphMask());
     }
 
     private void buildBuildersMap() {
@@ -149,15 +147,4 @@ public class FilterLibraryImpl implements FilterLibrary {
         content.remove(query);
     }
 
-    private static class HierarchicalGraphMask implements FilterLibraryMask {
-
-        public Category getCategory() {
-            return FilterLibrary.HIERARCHY;
-        }
-
-        public boolean isValid() {
-            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
-            return graphModel.isHierarchical();
-        }
-    }
 }
