@@ -82,8 +82,8 @@ public interface FilterLibrary extends Lookup.Provider {
     /**
      * Default <code>Category</code> for filters working on the graph hierarchy.
      */
-    public final static Category HIERARCHY = new Category(
-            NbBundle.getMessage(FilterLibrary.class, "FiltersLibrary.Category.Hierarchy"),
+    public final static Category GRAPH = new Category(
+            NbBundle.getMessage(FilterLibrary.class, "FiltersLibrary.Category.Graph"),
             null,
             TOPOLOGY);
 
