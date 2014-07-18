@@ -68,7 +68,7 @@ public class FilterProcessor {
                 }
             } else {
                 //Leaves
-                GraphView newView = graphModel.newView();
+                GraphView newView = graphModel.createView();
                 views.add(newView);
                 input = new Graph[]{graphModel.getGraph(newView)};    //duplicate root
             }
@@ -80,7 +80,7 @@ public class FilterProcessor {
             } else if (q instanceof OperatorQueryImpl && ((OperatorQueryImpl) q).isSimple()) {
                 OperatorQueryImpl operatorQuery = (OperatorQueryImpl) q;
                 Operator op = (Operator) operatorQuery.getFilter();
-                GraphView newView = graphModel.newView();
+                GraphView newView = graphModel.createView();
                 views.add(newView);
                 Graph newGraph = graphModel.getGraph(newView);
                 List<Filter> filters = new ArrayList<Filter>();
@@ -105,7 +105,7 @@ public class FilterProcessor {
                     processEdgeFilter((EdgeFilter) filter, input[0]);
                     q.setResult(input[0]);
                 } else if (filter instanceof ElementFilter) {
-                    processAttributableFilter((ElementFilter) filter, input[0]);
+                    processElementFilter((ElementFilter) filter, input[0]);
                     q.setResult(input[0]);
                 } else if (filter instanceof ComplexFilter) {
                     ComplexFilter cf = (ComplexFilter) filter;
@@ -127,12 +127,12 @@ public class FilterProcessor {
         return finalResult;
     }
 
-    private void processAttributableFilter(ElementFilter attributableFilter, Graph graph) {
-        if (((ElementFilter) attributableFilter).getType().equals(ElementFilter.Type.NODE)) {
-            if (init(attributableFilter, graph)) {
+    private void processElementFilter(ElementFilter elementFilter, Graph graph) {
+        if (((ElementFilter) elementFilter).getType().equals(ElementFilter.Type.NODE)) {
+            if (init(elementFilter, graph)) {
                 List<Node> nodesToRemove = new ArrayList<Node>();
                 for (Node n : graph.getNodes()) {
-                    if (!attributableFilter.evaluate(graph, n)) {
+                    if (!elementFilter.evaluate(graph, n)) {
                         nodesToRemove.add(n);
                     }
                 }
@@ -140,14 +140,14 @@ public class FilterProcessor {
                 for (Node n : nodesToRemove) {
                     graph.removeNode(n);
                 }
-                attributableFilter.finish();
+                elementFilter.finish();
             }
         } else {
             HierarchicalGraph hgraph = (HierarchicalGraph) graph;
-            if (init(attributableFilter, graph)) {
+            if (init(elementFilter, graph)) {
                 List<Edge> edgesToRemove = new ArrayList<Edge>();
                 for (Edge e : hgraph.getEdges()) {
-                    if (!attributableFilter.evaluate(hgraph, e)) {
+                    if (!elementFilter.evaluate(hgraph, e)) {
                         edgesToRemove.add(e);
                     }
                 }
@@ -158,7 +158,7 @@ public class FilterProcessor {
                 edgesToRemove.clear();
 
                 for (Edge e : hgraph.getMetaEdges()) {
-                    if (!attributableFilter.evaluate(hgraph, e)) {
+                    if (!elementFilter.evaluate(hgraph, e)) {
                         edgesToRemove.add(e);
                     }
                 }
@@ -166,7 +166,7 @@ public class FilterProcessor {
                     hgraph.removeMetaEdge(e);
                 }
 
-                attributableFilter.finish();
+                elementFilter.finish();
             }
         }
     }
