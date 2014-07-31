@@ -43,13 +43,13 @@ package org.gephi.filters.plugin;
 
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeUtils;
-import org.gephi.filters.spi.AttributableFilter;
+import org.gephi.filters.spi.ElementFilter;
 
 /**
  *
  * @author mbastian
  */
-public abstract class AbstractAttributeFilter extends AbstractFilter implements AttributableFilter {
+public abstract class AbstractAttributeFilter extends AbstractFilter implements ElementFilter {
 
     protected AttributeColumn column;
     protected AbstractAttributeFilter.Type type;
