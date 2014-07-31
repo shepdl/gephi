@@ -50,7 +50,6 @@ import org.gephi.filters.api.Range;
 import org.gephi.filters.plugin.AbstractFilter;
 import org.gephi.filters.spi.*;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -112,7 +111,7 @@ public class DegreeRangeBuilder implements FilterBuilder {
         }
 
         public boolean evaluate(Graph graph, Node node) {
-            int degree = ((HierarchicalGraph) graph).getTotalDegree(node);
+            int degree = graph.getDegree(node);
             return range.isInRange(degree);
         }
 
@@ -120,10 +119,9 @@ public class DegreeRangeBuilder implements FilterBuilder {
         }
 
         public Number[] getValues(Graph graph) {
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
-            List<Integer> values = new ArrayList<Integer>(((HierarchicalGraph) graph).getNodeCount());
-            for (Node n : hgraph.getNodes()) {
-                int degree = hgraph.getTotalDegree(n);
+            List<Integer> values = new ArrayList<Integer>(graph.getNodeCount());
+            for (Node n : graph.getNodes()) {
+                int degree = graph.getDegree(n);
                 values.add(degree);
             }
             return values.toArray(new Number[0]);

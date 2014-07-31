@@ -60,7 +60,6 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.partition.api.EdgePartition;
 import org.gephi.partition.api.NodePartition;
@@ -189,8 +188,7 @@ public class PartitionBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hg = (HierarchicalGraph) graph;
-            this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), hg);
+            this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), graph);
             return true;
         }
 
@@ -269,7 +267,7 @@ public class PartitionBuilder implements CategoryBuilder {
             if (partition.getPartsCount() == 0) {
                 //build partition
                 GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
-                this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), graphModel.getHierarchicalGraphVisible());
+                this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), graphModel.getGraphVisible());
             }
             return partition;
         }

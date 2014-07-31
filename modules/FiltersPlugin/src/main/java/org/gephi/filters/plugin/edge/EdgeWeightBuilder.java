@@ -53,7 +53,6 @@ import org.gephi.filters.plugin.graph.RangeUI;
 import org.gephi.filters.spi.*;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -108,11 +107,10 @@ public class EdgeWeightBuilder implements FilterBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
-            if (hgraph.getTotalEdgeCount() == 0) {
+            if (graph.getEdgeCount()== 0) {
                 return false;
             }
-            dynamicHelper = new DynamicAttributesHelper(this, hgraph);
+            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
@@ -125,9 +123,8 @@ public class EdgeWeightBuilder implements FilterBuilder {
         }
 
         public Number[] getValues(Graph graph) {
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
             List<Number> values = new ArrayList<Number>();
-            for (Edge e : hgraph.getEdgesAndMetaEdges()) {
+            for (Edge e : graph.getEdges()) {
                 float weight = dynamicHelper.getEdgeWeight(e);
                 values.add(weight);
             }

@@ -54,7 +54,6 @@ import org.gephi.filters.spi.Operator;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphView;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -112,47 +111,46 @@ public class NOTBuilderEdge implements FilterBuilder {
                 throw new IllegalArgumentException("Not Filter accepts a single graph in parameter");
             }
 
-            HierarchicalGraph hgraph = (HierarchicalGraph) graphs[0];
-            GraphView hgraphView = hgraph.getView();
-            HierarchicalGraph mainHGraph = hgraph.getView().getGraphModel().getHierarchicalGraph();
-            for (Edge e : mainHGraph.getEdges().toArray()) {
+            Graph graph =  graphs[0];
+            GraphView hgraphView = graph.getView();
+            Graph mainGraph = graph.getView().getGraphModel().getGraph();
+            for (Edge e : mainGraph.getEdges().toArray()) {
                 Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
                 Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
                 if (source != null && target != null) {
-                    Edge edgeInGraph = hgraph.getEdge(source, target);
+                    Edge edgeInGraph = graph.getEdge(source, target);
                     if (edgeInGraph == null) {
                         //The edge is not in graph
-                        hgraph.addEdge(e);
+                        graph.addEdge(e);
                     } else {
                         //The edge is in the graph
-                        hgraph.removeEdge(edgeInGraph);
+                        graph.removeEdge(edgeInGraph);
                     }
                 }
             }
-            return hgraph;
+            return graph;
         }
 
         public Graph filter(Graph graph, Filter[] filters) {
             if (filters.length > 1) {
                 throw new IllegalArgumentException("Not Filter accepts a single filter in parameter");
             }
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
             Filter filter = filters[0];
-            if (filter instanceof EdgeFilter && ((EdgeFilter) filter).init(hgraph)) {
+            if (filter instanceof EdgeFilter && ((EdgeFilter) filter).init(graph)) {
                 EdgeFilter edgeFilter = (EdgeFilter) filter;
                 List<Edge> edgesToRemove = new ArrayList<Edge>();
-                for (Edge e : hgraph.getEdgesAndMetaEdges().toArray()) {
-                    if (edgeFilter.evaluate(hgraph, e)) {
+                for (Edge e : graph.getEdges().toArray()) {
+                    if (edgeFilter.evaluate(graph, e)) {
                         edgesToRemove.add(e);
                     }
                 }
                 for (Edge e : edgesToRemove) {
-                    hgraph.removeEdge(e);
+                    graph.removeEdge(e);
                 }
                 edgeFilter.finish();
             }
 
-            return hgraph;
+            return graph;
         }
     }
 }

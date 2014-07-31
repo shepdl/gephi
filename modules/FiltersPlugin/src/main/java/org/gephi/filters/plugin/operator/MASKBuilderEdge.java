@@ -54,7 +54,6 @@ import org.gephi.filters.spi.Operator;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphView;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -135,12 +134,12 @@ public class MASKBuilderEdge implements FilterBuilder {
                 throw new IllegalArgumentException("Filter accepts a single graph in parameter");
             }
 
-            HierarchicalGraph hgraph = (HierarchicalGraph) graphs[0];
-            GraphView hgraphView = hgraph.getView();
-            HierarchicalGraph mainHGraph = hgraph.getView().getGraphModel().getHierarchicalGraph();
+            Graph graph = graphs[0];
+            GraphView hgraphView = graph.getView();
+            Graph mainGraph = graph.getView().getGraphModel().getGraph();
 
             List<Edge> edgesToKeep = new ArrayList<Edge>();
-            for (Edge e : mainHGraph.getEdges().toArray()) {
+            for (Edge e : mainGraph.getEdges().toArray()) {
                 Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
                 Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
                 boolean keep = false;
@@ -163,54 +162,53 @@ public class MASKBuilderEdge implements FilterBuilder {
                 }
             }
 
-            hgraph.clearEdges();
+            graph.clearEdges();
 
-            for (Node n : mainHGraph.getNodes().toArray()) {
+            for (Node n : mainGraph.getNodes().toArray()) {
                 if (n.getNodeData().getNode(hgraphView.getViewId()) == null) {
-                    hgraph.addNode(n);
+                    graph.addNode(n);
                 }
             }
 
             for (Edge e : edgesToKeep) {
-                hgraph.addEdge(e);
+                graph.addEdge(e);
             }
 
-            return hgraph;
+            return graph;
         }
 
         public Graph filter(Graph graph, Filter[] filters) {
             if (filters.length > 1) {
                 throw new IllegalArgumentException("Filter accepts a single filter in parameter");
             }
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
-            if (filters[0] instanceof NodeFilter && ((NodeFilter) filters[0]).init(hgraph)) {
+            if (filters[0] instanceof NodeFilter && ((NodeFilter) filters[0]).init(graph)) {
                 NodeFilter filter = (NodeFilter) filters[0];
-                GraphView hgraphView = hgraph.getView();
-                for (Edge e : hgraph.getEdges().toArray()) {
+                GraphView hgraphView = graph.getView();
+                for (Edge e : graph.getEdges().toArray()) {
                     Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
                     Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
                     boolean remove = false;
                     switch (option) {
                         case SOURCE:
-                            remove = !filter.evaluate(hgraph, source);
+                            remove = !filter.evaluate(graph, source);
                             break;
                         case TARGET:
-                            remove = !filter.evaluate(hgraph, target);
+                            remove = !filter.evaluate(graph, target);
                             break;
                         case BOTH:
-                            remove = !filter.evaluate(hgraph, source) || !filter.evaluate(hgraph, target);
+                            remove = !filter.evaluate(graph, source) || !filter.evaluate(graph, target);
                             break;
                         case ANY:
-                            remove = !filter.evaluate(hgraph, source) && !filter.evaluate(hgraph, target);
+                            remove = !filter.evaluate(graph, source) && !filter.evaluate(graph, target);
                             break;
                     }
                     if (remove) {
-                        hgraph.removeEdge(e);
+                        graph.removeEdge(e);
                     }
                 }
                 filter.finish();
             }
-            return hgraph;
+            return graph;
         }
 
         public String getOption() {

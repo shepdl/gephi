@@ -55,7 +55,6 @@ import org.gephi.filters.spi.NodeFilter;
 import org.gephi.filters.spi.Operator;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -109,40 +108,39 @@ public class INTERSECTIONBuilder implements FilterBuilder {
         }
 
         public Graph filter(Graph[] graphs) {
-            HierarchicalGraph minHGraph = (HierarchicalGraph) graphs[0];
+            Graph minGraph = graphs[0];
             int minElements = Integer.MAX_VALUE;
             for (int i = 0; i < graphs.length; i++) {
-                int count = ((HierarchicalGraph)graphs[i]).getNodeCount();
+                int count = graphs[i].getNodeCount();
                 if (count < minElements) {
-                    minHGraph = (HierarchicalGraph) graphs[i];
+                    minGraph = graphs[i];
                     minElements = count;
                 }
             }
-            for (Node n : minHGraph.getNodes().toArray()) {
+            for (Node n : minGraph.getNodes().toArray()) {
                 for (int i = 0; i < graphs.length; i++) {
-                    if ((HierarchicalGraph)graphs[i] != minHGraph) {
-                        if (!((HierarchicalGraph)graphs[i]).contains(n)) {
-                            minHGraph.removeNode(n);
+                    if (graphs[i] != minGraph) {
+                        if (!graphs[i].contains(n)) {
+                            minGraph.removeNode(n);
                             break;
                         }
                     }
                 }
             }
-            for (Edge e : minHGraph.getEdges().toArray()) {
+            for (Edge e : minGraph.getEdges().toArray()) {
                 for (int i = 0; i < graphs.length; i++) {
-                    if ((HierarchicalGraph)graphs[i] != minHGraph) {
-                        if (!((HierarchicalGraph)graphs[i]).contains(e)) {
-                            minHGraph.removeEdge(e);
+                    if (graphs[i] != minGraph) {
+                        if (!graphs[i].contains(e)) {
+                            minGraph.removeEdge(e);
                             break;
                         }
                     }
                 }
             }
-            return minHGraph;
+            return minGraph;
         }
 
         public Graph filter(Graph graph, Filter[] filters) {
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
             List<NodeFilter> nodeFilters = new ArrayList<NodeFilter>();
             List<EdgeFilter> edgeFilters = new ArrayList<EdgeFilter>();
             for (Filter f : filters) {
@@ -155,14 +153,14 @@ public class INTERSECTIONBuilder implements FilterBuilder {
             if (nodeFilters.size() > 0) {
                 for (Iterator<NodeFilter> itr = nodeFilters.iterator(); itr.hasNext();) {
                     NodeFilter nf = itr.next();
-                    if (!nf.init(hgraph)) {
+                    if (!nf.init(graph)) {
                         itr.remove();
                     }
                 }
                 List<Node> nodesToRemove = new ArrayList<Node>();
-                for (Node n : hgraph.getNodes()) {
+                for (Node n : graph.getNodes()) {
                     for (NodeFilter nf : nodeFilters) {
-                        if (!nf.evaluate(hgraph, n)) {
+                        if (!nf.evaluate(graph, n)) {
                             nodesToRemove.add(n);
                             break;
                         }
@@ -170,7 +168,7 @@ public class INTERSECTIONBuilder implements FilterBuilder {
                 }
 
                 for (Node n : nodesToRemove) {
-                    hgraph.removeNode(n);
+                    graph.removeNode(n);
                 }
 
                 for (NodeFilter nf : nodeFilters) {
@@ -180,14 +178,14 @@ public class INTERSECTIONBuilder implements FilterBuilder {
             if (edgeFilters.size() > 0) {
                 for (Iterator<EdgeFilter> itr = edgeFilters.iterator(); itr.hasNext();) {
                     EdgeFilter ef = itr.next();
-                    if (!ef.init(hgraph)) {
+                    if (!ef.init(graph)) {
                         itr.remove();
                     }
                 }
                 List<Edge> edgesToRemove = new ArrayList<Edge>();
-                for (Edge e : hgraph.getEdges()) {
+                for (Edge e : graph.getEdges()) {
                     for (EdgeFilter ef : edgeFilters) {
-                        if (!ef.evaluate(hgraph, e)) {
+                        if (!ef.evaluate(graph, e)) {
                             edgesToRemove.add(e);
                             break;
                         }
@@ -195,14 +193,14 @@ public class INTERSECTIONBuilder implements FilterBuilder {
                 }
 
                 for (Edge e : edgesToRemove) {
-                    hgraph.removeEdge(e);
+                    graph.removeEdge(e);
                 }
 
                 for (EdgeFilter ef : edgeFilters) {
                     ef.finish();
                 }
             }
-            return hgraph;
+            return graph;
         }
     }
 }

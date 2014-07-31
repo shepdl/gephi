@@ -111,7 +111,14 @@ public class MutualDegreeRangeBuilder implements FilterBuilder {
         }
 
         public boolean evaluate(Graph graph, Node node) {
-            int degree = ((HierarchicalDirectedGraph) graph).getMutualDegree(node);
+            DirectedGraph dgraph = (DirectedGraph)graph;
+            int degree = 0;
+            for (Edge outEdge : dgraph.getEdges(node)) {
+                Edge inEdge = dgraph.getMutualEdge(outEdge);
+                if (inEdge != null) {
+                    degree++;
+                }
+            }
             return range.isInRange(degree);
         }
 
@@ -119,10 +126,15 @@ public class MutualDegreeRangeBuilder implements FilterBuilder {
         }
 
         public Number[] getValues(Graph graph) {
-            HierarchicalDirectedGraph hgraph = (HierarchicalDirectedGraph) graph;
-            List<Integer> values = new ArrayList<Integer>(((HierarchicalGraph) graph).getNodeCount());
-            for (Node n : hgraph.getNodes()) {
-                int degree = hgraph.getMutualDegree(n);
+            DirectedGraph dgraph = (DirectedGraph)graph;
+            List<Integer> values = new ArrayList<Integer>(graph.getNodeCount());
+            for (Node n : dgraph.getNodes()) {
+                int degree = 0;
+                for (Edge outEdge : dgraph.getEdges(n)) {
+                    if (dgraph.getMutualEdge(outEdge) != null) {
+                        degree++;
+                    }
+                }
                 values.add(degree);
             }
             return values.toArray(new Number[0]);

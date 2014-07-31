@@ -55,7 +55,6 @@ import org.gephi.filters.spi.Operator;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphView;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -112,10 +111,10 @@ public class NOTBuilderNode implements FilterBuilder {
             if (graphs.length > 1) {
                 throw new IllegalArgumentException("Not Filter accepts a single graph in parameter");
             }
-            HierarchicalGraph hgraph = (HierarchicalGraph) graphs[0];
+            Graph hgraph = graphs[0];
             GraphView hgraphView = hgraph.getView();
-            HierarchicalGraph mainHGraph = hgraph.getView().getGraphModel().getHierarchicalGraph();
-            for (Node n : mainHGraph.getNodes().toArray()) {
+            Graph mainGraph = hgraph.getView().getGraphModel().getGraph();
+            for (Node n : mainGraph.getNodes().toArray()) {
                 if (n.getNodeData().getNode(hgraphView.getViewId()) == null) {
                     //The node n is not in graph
                     hgraph.addNode(n);
@@ -126,8 +125,8 @@ public class NOTBuilderNode implements FilterBuilder {
             }
 
             for (Node n : hgraph.getNodes().toArray()) {
-                Node mainNode = n.getNodeData().getNode(mainHGraph.getView().getViewId());
-                Edge[] edges = mainHGraph.getEdgesAndMetaEdges(mainNode).toArray();
+                Node mainNode = n.getNodeData().getNode(mainGraph.getView().getViewId());
+                Edge[] edges = mainGraph.getEdgesAndMetaEdges(mainNode).toArray();
                 for (Edge e : edges) {
                     if (e.getSource().getNodeData().getNode(hgraphView.getViewId()) != null
                             && e.getTarget().getNodeData().getNode(hgraphView.getViewId()) != null) {
@@ -143,37 +142,36 @@ public class NOTBuilderNode implements FilterBuilder {
             if (filters.length > 1) {
                 throw new IllegalArgumentException("Not Filter accepts a single filter in parameter");
             }
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
             Filter filter = filters[0];
-            if (filter instanceof NodeFilter && ((NodeFilter) filter).init(hgraph)) {
+            if (filter instanceof NodeFilter && ((NodeFilter) filter).init(graph)) {
                 List<Node> nodeToRemove = new ArrayList<Node>();
                 NodeFilter nodeFilter = (NodeFilter) filter;
-                for (Node n : hgraph.getNodes().toArray()) {
-                    if (nodeFilter.evaluate(hgraph, n)) {
+                for (Node n : graph.getNodes().toArray()) {
+                    if (nodeFilter.evaluate(graph, n)) {
                         nodeToRemove.add(n);
                     }
                 }
                 for (Node n : nodeToRemove) {
-                    hgraph.removeNode(n);
+                    graph.removeNode(n);
                 }
                 nodeFilter.finish();
             }
             
-            if (filter instanceof AttributableFilter && ((AttributableFilter) filter).getType()==AttributableFilter.Type.NODE && ((AttributableFilter) filter).init(hgraph)) {
+            if (filter instanceof AttributableFilter && ((AttributableFilter) filter).getType()==AttributableFilter.Type.NODE && ((AttributableFilter) filter).init(graph)) {
                 List<Node> nodeToRemove = new ArrayList<Node>();
                 AttributableFilter attributableFilter = (AttributableFilter) filter;
-                for (Node n : hgraph.getNodes().toArray()) {
-                    if (attributableFilter.evaluate(hgraph, n)) {
+                for (Node n : graph.getNodes().toArray()) {
+                    if (attributableFilter.evaluate(graph, n)) {
                         nodeToRemove.add(n);
                     }
                 }
                 for (Node n : nodeToRemove) {
-                    hgraph.removeNode(n);
+                    graph.removeNode(n);
                 }
                 attributableFilter.finish();
             }
 
-            return hgraph;
+            return graph;
         }
     }
 }

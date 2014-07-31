@@ -58,7 +58,6 @@ import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.graph.api.Attributable;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -119,13 +118,12 @@ public class AttributeNonNullBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hg = (HierarchicalGraph) graph;
             if (AttributeUtils.getDefault().isNodeColumn(column)) {
                 if (graph.getNodeCount() == 0) {
                     return false;
                 }
             } else if (AttributeUtils.getDefault().isEdgeColumn(column)) {
-                if (hg.getTotalEdgeCount() == 0) {
+                if (graph.getEdgeCount() == 0) {
                     return false;
                 }
             }

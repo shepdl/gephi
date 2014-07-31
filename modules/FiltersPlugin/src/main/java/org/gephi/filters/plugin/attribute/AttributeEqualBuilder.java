@@ -134,8 +134,7 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hg = (HierarchicalGraph) graph;
-            dynamicHelper = new DynamicAttributesHelper(this, hg);
+            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
@@ -212,17 +211,16 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hg = (HierarchicalGraph) graph;
             if (AttributeUtils.getDefault().isNodeColumn(column)) {
                 if (graph.getNodeCount() == 0) {
                     return false;
                 }
             } else if (AttributeUtils.getDefault().isEdgeColumn(column)) {
-                if (hg.getTotalEdgeCount() == 0) {
+                if (graph.getEdgeCount() == 0) {
                     return false;
                 }
             }
-            dynamicHelper = new DynamicAttributesHelper(this, hg);
+            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
@@ -249,7 +247,7 @@ public class AttributeEqualBuilder implements CategoryBuilder {
                     }
                 }
             } else {
-                for (Edge e : ((HierarchicalGraph) graph).getEdgesAndMetaEdges()) {
+                for (Edge e : graph.getEdges()) {
                     Object val = e.getEdgeData().getAttributes().getValue(column.getIndex());
                     val = dynamicHelper.getDynamicValue(val);
                     if (val != null) {
@@ -321,8 +319,7 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hg = (HierarchicalGraph) graph;
-            dynamicHelper = new DynamicAttributesHelper(this, hg);
+            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 

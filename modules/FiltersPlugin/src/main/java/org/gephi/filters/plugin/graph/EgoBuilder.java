@@ -54,7 +54,6 @@ import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.filters.spi.FilterProperty;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -105,12 +104,11 @@ public class EgoBuilder implements FilterBuilder {
         private int depth = 1;
 
         public Graph filter(Graph graph) {
-            HierarchicalGraph hgraph = (HierarchicalGraph) graph;
 
             String str = pattern.toLowerCase();
 
             List<Node> nodes = new ArrayList<Node>();
-            for (Node n : hgraph.getNodes()) {
+            for (Node n : graph.getNodes()) {
                 if (n.getNodeData().getId().toLowerCase().equals(str)) {
                     nodes.add(n);
                 } else if ((n.getNodeData().getLabel() != null) && n.getNodeData().getLabel().toLowerCase().equals(str)) {
@@ -127,7 +125,7 @@ public class EgoBuilder implements FilterBuilder {
                 Node[] nei = neighbours.toArray(new Node[0]);
                 neighbours.clear();
                 for (Node n : nei) {
-                    for (Node neighbor : hgraph.getNeighbors(n)) {
+                    for (Node neighbor : graph.getNeighbors(n)) {
                         if (!result.contains(neighbor)) {
                             neighbours.add(neighbor);
                             result.add(neighbor);
@@ -145,13 +143,13 @@ public class EgoBuilder implements FilterBuilder {
                 result.removeAll(nodes);
             }
 
-            for (Node node : hgraph.getNodes().toArray()) {
+            for (Node node : graph.getNodes().toArray()) {
                 if (!result.contains(node)) {
-                    hgraph.removeNode(node);
+                    graph.removeNode(node);
                 }
             }
 
-            return hgraph;
+            return graph;
         }
 
         public String getName() {

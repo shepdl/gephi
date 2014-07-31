@@ -111,7 +111,7 @@ public class InDegreeRangeBuilder implements FilterBuilder {
         }
 
         public boolean evaluate(Graph graph, Node node) {
-            int degree = ((HierarchicalDirectedGraph) graph).getTotalInDegree(node);
+            int degree = ((DirectedGraph) graph).getInDegree(node);
             return range.isInRange(degree);
         }
 
@@ -119,10 +119,10 @@ public class InDegreeRangeBuilder implements FilterBuilder {
         }
 
         public Number[] getValues(Graph graph) {
-            HierarchicalDirectedGraph hgraph = (HierarchicalDirectedGraph) graph;
-            List<Integer> values = new ArrayList<Integer>(((HierarchicalGraph) graph).getNodeCount());
-            for (Node n : hgraph.getNodes()) {
-                int degree = hgraph.getTotalInDegree(n);
+            DirectedGraph dgraph = (DirectedGraph) graph;
+            List<Integer> values = new ArrayList<Integer>(((DirectedGraph) graph).getNodeCount());
+            for (Node n : dgraph.getNodes()) {
+                int degree = dgraph.getInDegree(n);
                 values.add(degree);
             }
             return values.toArray(new Number[0]);

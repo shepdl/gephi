@@ -53,7 +53,6 @@ import org.gephi.filters.plugin.graph.RangeUI;
 import org.gephi.filters.spi.*;
 import org.gephi.graph.api.Attributable;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.partition.api.*;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -135,8 +134,7 @@ public class PartitionCountBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            HierarchicalGraph hg = (HierarchicalGraph) graph;
-            this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), hg);
+            this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), graph);
             if (partition.getParts().length > 0) {
                 return true;
             }
