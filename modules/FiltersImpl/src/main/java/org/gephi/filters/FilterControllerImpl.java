@@ -352,12 +352,13 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
         Graph fullHGraph = model.getGraphModel().getGraph();
         fullHGraph.readLock();
         for (Node n : fullHGraph.getNodes()) {
-            boolean inView = n.getNodeData().getNode(result.getView().getViewId()) != null;
-            n.getNodeData().getTextData().setVisible(inView);
+            // TODO: test this
+            boolean inView = n.getTextProperties().isVisible();
+            n.getTextProperties().setVisible(inView);
         }
-        for (Edge e : fullHGraph.getEdgesAndMetaEdges()) {
+        for (Edge e : fullHGraph.getEdges()) {
             boolean inView = result.contains(e);
-            e.getEdgeData().getTextData().setVisible(inView);
+            e.getTextProperties().setVisible(inView);
         }
         fullHGraph.readUnlock();
     }
