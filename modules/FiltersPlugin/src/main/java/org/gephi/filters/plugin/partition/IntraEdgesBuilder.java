@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.attribute.api.Column;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
 import org.gephi.filters.spi.Category;
@@ -96,10 +96,10 @@ public class IntraEdgesBuilder implements CategoryBuilder {
 
     private static class IntraEdgesFilterBuilder implements FilterBuilder {
 
-        private final AttributeColumn column;
+        private final Column column;
         private Partition partition;
 
-        public IntraEdgesFilterBuilder(AttributeColumn column, NodePartition partition) {
+        public IntraEdgesFilterBuilder(Column column, NodePartition partition) {
             this.column = column;
             this.partition = partition;
         }

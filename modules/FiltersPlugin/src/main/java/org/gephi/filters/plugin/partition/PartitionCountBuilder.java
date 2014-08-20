@@ -44,14 +44,14 @@ package org.gephi.filters.plugin.partition;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.attribute.api.Column;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.api.Range;
 import org.gephi.filters.plugin.AbstractAttributeFilter;
 import org.gephi.filters.plugin.AbstractAttributeFilterBuilder;
 import org.gephi.filters.plugin.graph.RangeUI;
 import org.gephi.filters.spi.*;
-import org.gephi.graph.api.Attributable;
+import org.gephi.graph.api.Element;
 import org.gephi.graph.api.Graph;
 import org.gephi.partition.api.*;
 import org.openide.util.Lookup;
@@ -98,7 +98,7 @@ public class PartitionCountBuilder implements CategoryBuilder {
 
         private Partition partition;
 
-        public PartitionCountFilterBuilder(AttributeColumn column, Partition partition) {
+        public PartitionCountFilterBuilder(Column column, Partition partition) {
             super(column,
                     PARTITION_COUNT,
                     NbBundle.getMessage(PartitionCountBuilder.class, "PartitionCountBuilder.description"),
@@ -141,7 +141,7 @@ public class PartitionCountBuilder implements CategoryBuilder {
             return false;
         }
 
-        public boolean evaluate(Graph graph, Attributable attributable) {
+        public boolean evaluate(Graph graph, Element attributable) {
             Part p = partition.getPart(attributable);
             if (p != null) {
                 int partCount = p.getObjects().length;

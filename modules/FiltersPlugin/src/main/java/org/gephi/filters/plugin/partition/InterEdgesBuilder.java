@@ -47,7 +47,12 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.appearance.api.EdgePartition;
+import org.gephi.appearance.api.NodePartition;
+import org.gephi.appearance.api.Part;
+import org.gephi.appearance.api.Partition;
+import org.gephi.appearance.api.PartitionController;
+import org.gephi.attribute.api.Column;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
 import org.gephi.filters.spi.Category;
@@ -57,11 +62,6 @@ import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.appearance.api.EdgePartition;
-import org.gephi.appearance.api.NodePartition;
-import org.gephi.appearance.api.Part;
-import org.gephi.appearance.api.Partition;
-import org.gephi.appearance.api.PartitionController;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -99,10 +99,10 @@ public class InterEdgesBuilder implements CategoryBuilder {
 
     private static class InterEdgesFilterBuilder implements FilterBuilder {
 
-        private final AttributeColumn column;
+        private final Column column;
         private Partition partition;
 
-        public InterEdgesFilterBuilder(AttributeColumn column, NodePartition partition) {
+        public InterEdgesFilterBuilder(Column column, NodePartition partition) {
             this.column = column;
             this.partition = partition;
         }

@@ -46,7 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.attribute.api.Column;
 import org.gephi.data.attributes.api.AttributeUtils;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.spi.Category;
@@ -109,15 +109,15 @@ public class PartitionBuilder implements CategoryBuilder {
 
     private static class PartitionFilterBuilder implements FilterBuilder {
 
-        private final AttributeColumn column;
+        private final Column column;
         private Partition partition;
 
-        public PartitionFilterBuilder(AttributeColumn column, NodePartition partition) {
+        public PartitionFilterBuilder(Column column, NodePartition partition) {
             this.column = column;
             this.partition = partition;
         }
 
-        public PartitionFilterBuilder(AttributeColumn column, EdgePartition partition) {
+        public PartitionFilterBuilder(Column column, EdgePartition partition) {
             this.column = column;
             this.partition = partition;
         }
@@ -254,7 +254,7 @@ public class PartitionBuilder implements CategoryBuilder {
                 filterProperties = new FilterProperty[0];
                 try {
                     filterProperties = new FilterProperty[]{
-                        FilterProperty.createProperty(this, AttributeColumn.class, "column"),
+                        FilterProperty.createProperty(this, Column.class, "column"),
                         FilterProperty.createProperty(this, List.class, "parts")};
                 } catch (Exception ex) {
                     Exceptions.printStackTrace(ex);
@@ -280,11 +280,11 @@ public class PartitionBuilder implements CategoryBuilder {
             return parts;
         }
 
-        public AttributeColumn getColumn() {
+        public Column getColumn() {
             return partition.getColumn();
         }
 
-        public void setColumn(AttributeColumn column) {
+        public void setColumn(Column column) {
         }
 
         public void setParts(List<Part> parts) {
