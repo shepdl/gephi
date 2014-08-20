@@ -98,7 +98,7 @@ public class EdgeWeightBuilder implements FilterBuilder {
     public static class EdgeWeightFilter extends AbstractFilter implements RangeFilter, EdgeFilter {
 
         private Range range;
-        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
+//        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
 
         public EdgeWeightFilter() {
             super(NbBundle.getMessage(EdgeWeightBuilder.class, "EdgeWeightBuilder.name"));
@@ -110,13 +110,13 @@ public class EdgeWeightBuilder implements FilterBuilder {
             if (graph.getEdgeCount()== 0) {
                 return false;
             }
-            dynamicHelper = new DynamicAttributesHelper(this, graph);
+//            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
         public boolean evaluate(Graph graph, Edge edge) {
-            float weight = dynamicHelper.getEdgeWeight(edge);
-            return range.isInRange(weight);
+//            float weight = dynamicHelper.getEdgeWeight(edge);
+            return range.isInRange(edge.getWeight());
         }
 
         public void finish() {
@@ -125,7 +125,8 @@ public class EdgeWeightBuilder implements FilterBuilder {
         public Number[] getValues(Graph graph) {
             List<Number> values = new ArrayList<Number>();
             for (Edge e : graph.getEdges()) {
-                float weight = dynamicHelper.getEdgeWeight(e);
+//                float weight = dynamicHelper.getEdgeWeight(e);
+                double weight = e.getWeight();
                 values.add(weight);
             }
             return values.toArray(new Number[0]);
