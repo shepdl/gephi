@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.attribute.api.Column;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.type.TimeInterval;
@@ -64,7 +64,7 @@ import org.gephi.filters.spi.NodeFilter;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.Node;
-import org.gephi.timeline.api.TimelineController;
+//import org.gephi.timeline.api.TimelineController;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -76,6 +76,17 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = CategoryBuilder.class)
 public class DynamicRangeBuilder implements CategoryBuilder {
 
+    @Override
+    public FilterBuilder[] getBuilders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Category getCategory() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /*
     private final static Category DYNAMIC = new Category(
             NbBundle.getMessage(DynamicRangeBuilder.class, "DynamicRangeBuilder.category"),
             null,
@@ -88,8 +99,8 @@ public class DynamicRangeBuilder implements CategoryBuilder {
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
         AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        AttributeColumn nodeColumn = am.getNodeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
-        AttributeColumn edgeColumn = am.getEdgeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
+        Column nodeColumn = am.getNodeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
+        Column edgeColumn = am.getEdgeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
         if (nodeColumn != null || edgeColumn != null) {
             builders.add(new DynamicRangeFilterBuilder(nodeColumn, edgeColumn));
         }
@@ -98,10 +109,10 @@ public class DynamicRangeBuilder implements CategoryBuilder {
 
     private static class DynamicRangeFilterBuilder implements FilterBuilder {
 
-        private final AttributeColumn nodeColumn;
-        private final AttributeColumn edgeColumn;
+        private final Column nodeColumn;
+        private final Column edgeColumn;
 
-        public DynamicRangeFilterBuilder(AttributeColumn nodeColumn, AttributeColumn edgeColumn) {
+        public DynamicRangeFilterBuilder(Column nodeColumn, Column edgeColumn) {
             this.nodeColumn = nodeColumn;
             this.edgeColumn = edgeColumn;
         }
@@ -144,8 +155,8 @@ public class DynamicRangeBuilder implements CategoryBuilder {
 
     public static class DynamicRangeFilter implements NodeFilter, EdgeFilter, DynamicModelListener {
 
-        private AttributeColumn nodeColumn;
-        private AttributeColumn edgeColumn;
+        private Column nodeColumn;
+        private Column edgeColumn;
         private DynamicController dynamicController;
         private DynamicModel dynamicModel;
         private TimelineController timelineController;
@@ -154,7 +165,7 @@ public class DynamicRangeBuilder implements CategoryBuilder {
         private Range range;
         private boolean keepNull = true;
 
-        public DynamicRangeFilter(TimelineController timelineController, DynamicController dynamicController, AttributeColumn nodeColumn, AttributeColumn edgeColumn) {
+        public DynamicRangeFilter(TimelineController timelineController, DynamicController dynamicController, Column nodeColumn, Column edgeColumn) {
             this.nodeColumn = nodeColumn;
             this.edgeColumn = edgeColumn;
             this.dynamicController = dynamicController;
@@ -249,4 +260,5 @@ public class DynamicRangeBuilder implements CategoryBuilder {
             dynamicController.removeModelListener(this);
         }
     }
+    */
 }

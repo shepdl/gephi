@@ -50,7 +50,7 @@ import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.Query;
-import org.gephi.filters.plugin.dynamic.DynamicRangeBuilder.DynamicRangeFilter;
+//import org.gephi.filters.plugin.dynamic.DynamicRangeBuilder.DynamicRangeFilter;
 import org.gephi.filters.spi.Filter;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
@@ -62,6 +62,10 @@ import org.openide.util.Lookup;
  * @author Mathieu Bastian
  */
 public class DynamicAttributesHelper {
+
+    /*
+
+    Removed until dynamic attributes are re-implemented
 
     private final FilterModel filterModel;
     private final DynamicModel dynamicModel;
@@ -127,4 +131,5 @@ public class DynamicAttributesHelper {
         }
         return edge.getWeight();
     }
+    */
 }
