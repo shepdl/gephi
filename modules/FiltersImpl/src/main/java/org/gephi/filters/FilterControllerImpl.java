@@ -283,18 +283,14 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             result = (Graph) processor.process((AbstractQueryImpl) query, graphModel);
         }
-//        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
         AttributeModel am = Lookup.getDefault().lookup(AttributeModel.class);
-//        AttributeColumn nodeCol = am.getNodeTable().getColumn("filter_" + title);
         Column nodeCol = am.getNodeTable().getColumn("filter_" + title);
         if (nodeCol == null) {
-//            nodeCol = am.getNodeTable().addColumn("filter_" + title, title, AttributeType.BOOLEAN, AttributeOrigin.COMPUTED, Boolean.FALSE);
-            // A guess: still working on this ...
-            nodeCol = am.getNodeTable().addColumn("filter_" + title, title, null, Origin.DATA, am, true);
+            nodeCol = am.getNodeTable().addColumn("filter_" + title, title, Boolean.class, Origin.PROPERTY, null, true);
         }
         Column edgeCol = am.getEdgeTable().getColumn("filter_" + title);
         if (edgeCol == null) {
-            edgeCol = am.getEdgeTable().addColumn("filter_" + title, title, AttributeType.BOOLEAN, AttributeOrigin.COMPUTED, Boolean.FALSE);
+            edgeCol = am.getEdgeTable().addColumn("filter_" + title, title, Boolean.class, Origin.PROPERTY, null, false);
         }
         result.readLock();
         for (Node n : result.getNodes()) {
