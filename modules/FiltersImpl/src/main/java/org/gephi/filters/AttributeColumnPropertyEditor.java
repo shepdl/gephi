@@ -42,10 +42,10 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.filters;
 
 import java.beans.PropertyEditorSupport;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeType;
+import org.gephi.attribute.api.Column;
+import org.gephi.attribute.api.AttributeModel;
+//import org.gephi.data.attributes.api.AttributeColumn;
+//import org.gephi.data.attributes.api.AttributeController;
 import org.openide.util.Lookup;
 
 /**
@@ -54,11 +54,11 @@ import org.openide.util.Lookup;
  */
 public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
     
-    private AttributeColumn column;
+    private Column column;
 
     @Override
     public void setValue(Object value) {
-        this.column = (AttributeColumn) value;
+        this.column = (Column) value;
     }
 
     @Override
@@ -69,11 +69,12 @@ public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
     @Override
     public String getAsText() {
         if (column != null) {
-            AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
+            //AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
+            AttributeModel model = Lookup.getDefault().lookup(AttributeModel.class);
             if (model.getNodeTable().hasColumn(column.getTitle())) {
-                return "NODE*-*" + column.getId() + "*-*" + column.getType().getTypeString();
+                return "NODE*-*" + column.getId() + "*-*" + column.getTypeClass().getSimpleName();
             } else if (model.getEdgeTable().hasColumn(column.getTitle())) {
-                return "EDGE*-*" + column.getId() + "*-*" + column.getType().getTypeString();
+                return "EDGE*-*" + column.getId() + "*-*" + column.getTypeClass().getSimpleName();
             }
         }
         return "null";
@@ -83,7 +84,8 @@ public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
         if (!text.equals("null")) {
-            AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
+//            AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
+            AttributeModel model = Lookup.getDefault().lookup(AttributeModel.class);
             String[] arr = text.split("\\*-\\*");
             if (arr[0].equals("NODE")) {
                 column = model.getNodeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));

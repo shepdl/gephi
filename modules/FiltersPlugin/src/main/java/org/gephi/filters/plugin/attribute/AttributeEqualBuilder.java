@@ -46,7 +46,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.*;
+import org.gephi.attribute.api.AttributeModel;
+import org.gephi.attribute.api.AttributeUtils;
+import org.gephi.attribute.api.Column;
+import org.gephi.attribute.time.TimestampBooleanSet;
+import org.gephi.attribute.time.TimestampStringSet;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.api.Range;
 import org.gephi.filters.plugin.AbstractAttributeFilter;
@@ -76,18 +80,21 @@ public class AttributeEqualBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
-        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        List<AttributeColumn> columns = new ArrayList<AttributeColumn>();
+        AttributeModel am = Lookup.getDefault().lookup(AttributeModel.class);
+        List<Column> columns = new ArrayList<Column>();
         columns.addAll(Arrays.asList(am.getNodeTable().getColumns()));
         columns.addAll(Arrays.asList(am.getEdgeTable().getColumns()));
-        for (AttributeColumn c : columns) {
-            if (AttributeUtils.getDefault().isStringColumn(c) || c.getType().equals(AttributeType.DYNAMIC_STRING)) {
+        for (Column c : columns) {
+//            if (AttributeUtils.isStringColumn(c) || c.getTypeClass().equals(AttributeType.DYNAMIC_STRING)) {
+            if (c.getTypeClass().equals(String.class) || c.getTypeClass().equals(TimestampStringSet.class)) {
                 EqualStringFilterBuilder b = new EqualStringFilterBuilder(c);
                 builders.add(b);
-            } else if (AttributeUtils.getDefault().isNumberColumn(c) || AttributeUtils.getDefault().isDynamicNumberColumn(c)) {
+//            } else if (AttributeUtils.getDefault().isNumberColumn(c) || AttributeUtils.getDefault().isDynamicNumberColumn(c)) {
+            } else if (AttributeUtils.isNumberType(c.getTypeClass())) {
                 EqualNumberFilterBuilder b = new EqualNumberFilterBuilder(c);
                 builders.add(b);
-            } else if (c.getType().equals(AttributeType.BOOLEAN) || c.getType().equals(AttributeType.DYNAMIC_BOOLEAN)) {
+//            } else if (c.getType().equals(AttributeType.BOOLEAN) || c.getType().equals(AttributeType.DYNAMIC_BOOLEAN)) {
+            } else if (c.getTypeClass().equals(Boolean.class) || c.getTypeClass().equals(TimestampBooleanSet.class)) {
                 EqualBooleanFilterBuilder b = new EqualBooleanFilterBuilder(c);
                 builders.add(b);
             }
@@ -97,7 +104,7 @@ public class AttributeEqualBuilder implements CategoryBuilder {
 
     private static class EqualStringFilterBuilder extends AbstractAttributeFilterBuilder {
 
-        public EqualStringFilterBuilder(AttributeColumn column) {
+        public EqualStringFilterBuilder(Column column) {
             super(column,
                     EQUAL,
                     NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeEqualBuilder.description"),
@@ -122,9 +129,9 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         private String pattern;
         private boolean useRegex;
         private Pattern regex;
-        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
+//        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
 
-        public EqualStringFilter(AttributeColumn column) {
+        public EqualStringFilter(Column column) {
             super(NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeEqualBuilder.name"),
                     column);
 
@@ -134,16 +141,16 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            dynamicHelper = new DynamicAttributesHelper(this, graph);
+//            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
-        public boolean evaluate(Graph graph, Attributable attributable) {
+        public boolean evaluate(Graph graph, Element element) {
             if (pattern == null) {
                 return true;
             }
-            Object val = attributable.getAttributes().getValue(column.getIndex());
-            val = dynamicHelper.getDynamicValue(val);
+            Object val = element.getAttribute(column);
+//            val = dynamicHelper.getDynamicValue(val);
             if (val != null && useRegex) {
                 return regex.matcher(val.toString()).matches();
             } else if (val != null) {
@@ -175,7 +182,7 @@ public class AttributeEqualBuilder implements CategoryBuilder {
 
     private static class EqualNumberFilterBuilder extends AbstractAttributeFilterBuilder {
 
-        public EqualNumberFilterBuilder(AttributeColumn column) {
+        public EqualNumberFilterBuilder(Column column) {
             super(column,
                     EQUAL,
                     NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeEqualBuilder.description"),
@@ -200,9 +207,9 @@ public class AttributeEqualBuilder implements CategoryBuilder {
 
         private Number match;
         private Range range;
-        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
+//        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
 
-        public EqualNumberFilter(AttributeColumn column) {
+        public EqualNumberFilter(Column column) {
             super(NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeEqualBuilder.name"), column);
 
             //App property
@@ -211,22 +218,24 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+//            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+            if (AttributeUtils.isNodeColumn(column)) {
                 if (graph.getNodeCount() == 0) {
                     return false;
                 }
-            } else if (AttributeUtils.getDefault().isEdgeColumn(column)) {
+            } else if (AttributeUtils.isEdgeColumn(column)) {
                 if (graph.getEdgeCount() == 0) {
                     return false;
                 }
             }
-            dynamicHelper = new DynamicAttributesHelper(this, graph);
+//            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
-        public boolean evaluate(Graph graph, Attributable attributable) {
-            Object val = attributable.getAttributes().getValue(column.getIndex());
-            val = dynamicHelper.getDynamicValue(val);
+        @Override
+        public boolean evaluate(Graph graph, Element element) {
+            Object val = element.getAttribute(column);
+//            val = dynamicHelper.getDynamicValue(val);
             if (val != null) {
                 return val.equals(match);
             }
@@ -238,18 +247,20 @@ public class AttributeEqualBuilder implements CategoryBuilder {
 
         public Number[] getValues(Graph graph) {
             List<Number> vals = new ArrayList<Number>();
-            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+//            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+            if (AttributeUtils.isNodeColumn(column)) {
                 for (Node n : graph.getNodes()) {
-                    Object val = n.getNodeData().getAttributes().getValue(column.getIndex());
-                    val = dynamicHelper.getDynamicValue(val);
+                    Object val = n.getAttribute(column);
+//                    val = dynamicHelper.getDynamicValue(val);
                     if (val != null) {
                         vals.add((Number) val);
                     }
                 }
             } else {
                 for (Edge e : graph.getEdges()) {
-                    Object val = e.getEdgeData().getAttributes().getValue(column.getIndex());
-                    val = dynamicHelper.getDynamicValue(val);
+                    Object val = e.getAttribute(column);
+//                    Object val = e.getEdgeData().getAttributes().getValue(column.getIndex());
+//                    val = dynamicHelper.getDynamicValue(val);
                     if (val != null) {
                         vals.add((Number) val);
                     }
@@ -286,7 +297,7 @@ public class AttributeEqualBuilder implements CategoryBuilder {
 
     private static class EqualBooleanFilterBuilder extends AbstractAttributeFilterBuilder {
 
-        public EqualBooleanFilterBuilder(AttributeColumn column) {
+        public EqualBooleanFilterBuilder(Column column) {
             super(column,
                     EQUAL,
                     NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeEqualBuilder.description"), null);
@@ -308,9 +319,9 @@ public class AttributeEqualBuilder implements CategoryBuilder {
     public static class EqualBooleanFilter extends AbstractAttributeFilter {
 
         private boolean match = false;
-        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
+//        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
 
-        public EqualBooleanFilter(AttributeColumn column) {
+        public EqualBooleanFilter(Column column) {
             super(NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeEqualBuilder.name"),
                     column);
 
@@ -319,13 +330,12 @@ public class AttributeEqualBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            dynamicHelper = new DynamicAttributesHelper(this, graph);
+//            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
-        public boolean evaluate(Graph graph, Attributable attributable) {
-            Object val = attributable.getAttributes().getValue(column.getIndex());
-            val = dynamicHelper.getDynamicValue(val);
+        public boolean evaluate(Graph graph, Element attributable) {
+            Object val = attributable.getAttribute(column);
             if (val != null) {
                 return val.equals(match);
             }

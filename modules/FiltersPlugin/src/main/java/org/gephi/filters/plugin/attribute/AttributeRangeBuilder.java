@@ -45,10 +45,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeUtils;
+import org.gephi.attribute.api.Column;
+import org.gephi.attribute.api.AttributeModel;
+import org.gephi.attribute.api.AttributeUtils;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.api.Range;
 import org.gephi.filters.plugin.AbstractAttributeFilter;
@@ -79,12 +78,12 @@ public class AttributeRangeBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
-        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        List<AttributeColumn> columns = new ArrayList<AttributeColumn>();
+        AttributeModel am = Lookup.getDefault().lookup(AttributeModel.class);
+        List<Column> columns = new ArrayList<Column>();
         columns.addAll(Arrays.asList(am.getNodeTable().getColumns()));
         columns.addAll(Arrays.asList(am.getEdgeTable().getColumns()));
-        for (AttributeColumn c : columns) {
-            if (AttributeUtils.getDefault().isNumberColumn(c) || AttributeUtils.getDefault().isDynamicNumberColumn(c)) {
+        for (Column c : columns) {
+            if (AttributeUtils.isNumberType(c.getTypeClass())) {
                 AttributeRangeFilterBuilder b = new AttributeRangeFilterBuilder(c);
                 builders.add(b);
             }
@@ -94,7 +93,7 @@ public class AttributeRangeBuilder implements CategoryBuilder {
 
     private static class AttributeRangeFilterBuilder extends AbstractAttributeFilterBuilder {
 
-        public AttributeRangeFilterBuilder(AttributeColumn column) {
+        public AttributeRangeFilterBuilder(Column column) {
             super(column,
                     RANGE,
                     NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeRangeBuilder.description"),
@@ -117,9 +116,9 @@ public class AttributeRangeBuilder implements CategoryBuilder {
     public static class AttributeRangeFilter extends AbstractAttributeFilter implements RangeFilter {
 
         private Range range;
-        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
+//        private DynamicAttributesHelper dynamicHelper = new DynamicAttributesHelper(this, null);
 
-        public AttributeRangeFilter(AttributeColumn column) {
+        public AttributeRangeFilter(Column column) {
             super(NbBundle.getMessage(AttributeRangeBuilder.class, "AttributeRangeBuilder.name"),
                     column);
 
@@ -128,22 +127,22 @@ public class AttributeRangeBuilder implements CategoryBuilder {
         }
 
         public boolean init(Graph graph) {
-            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+            if (AttributeUtils.isNodeColumn(column)) {
                 if (graph.getNodeCount() == 0) {
                     return false;
                 }
-            } else if (AttributeUtils.getDefault().isEdgeColumn(column)) {
+            } else if (AttributeUtils.isEdgeColumn(column)) {
                 if (graph.getEdgeCount() == 0) {
                     return false;
                 }
             }
-            dynamicHelper = new DynamicAttributesHelper(this, graph);
+//            dynamicHelper = new DynamicAttributesHelper(this, graph);
             return true;
         }
 
-        public boolean evaluate(Graph graph, Attributable attributable) {
-            Object val = attributable.getAttributes().getValue(column.getIndex());
-            val = dynamicHelper.getDynamicValue(val);
+        public boolean evaluate(Graph graph, Element attributable) {
+            Object val = attributable.getAttribute(column);
+//            val = dynamicHelper.getDynamicValue(val);
             if (val != null) {
                 return range.isInRange((Number) val);
             }
@@ -156,18 +155,17 @@ public class AttributeRangeBuilder implements CategoryBuilder {
 
         public Number[] getValues(Graph graph) {
             List<Number> vals = new ArrayList<Number>();
-            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+            if (AttributeUtils.isNodeColumn(column)) {
                 for (Node n : graph.getNodes()) {
-                    Object val = n.getNodeData().getAttributes().getValue(column.getIndex());
-                    val = dynamicHelper.getDynamicValue(val);
+                    Object val = n.getAttribute(column);
+//                    val = dynamicHelper.getDynamicValue(val);
                     if (val != null) {
                         vals.add((Number) val);
                     }
                 }
             } else {
                 for (Edge e : graph.getEdges()) {
-                    Object val = e.getEdgeData().getAttributes().getValue(column.getIndex());
-                    val = dynamicHelper.getDynamicValue(val);
+                    Object val = e.getAttribute(column);
                     if (val != null) {
                         vals.add((Number) val);
                     }

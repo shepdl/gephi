@@ -45,10 +45,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeUtils;
+import org.gephi.attribute.api.Column;
+import org.gephi.attribute.api.AttributeUtils;
+import org.gephi.attribute.api.AttributeModel;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.plugin.AbstractAttributeFilter;
 import org.gephi.filters.plugin.AbstractAttributeFilterBuilder;
@@ -56,7 +55,7 @@ import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.CategoryBuilder;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
-import org.gephi.graph.api.Attributable;
+import org.gephi.graph.api.Element;
 import org.gephi.graph.api.Graph;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -80,11 +79,11 @@ public class AttributeNonNullBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
-        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        List<AttributeColumn> columns = new ArrayList<AttributeColumn>();
+        AttributeModel am = Lookup.getDefault().lookup(AttributeModel.class);
+        List<Column> columns = new ArrayList<Column>();
         columns.addAll(Arrays.asList(am.getNodeTable().getColumns()));
         columns.addAll(Arrays.asList(am.getEdgeTable().getColumns()));
-        for (AttributeColumn c : columns) {
+        for (Column c : columns) {
             AttributeNonNullFilterBuilder b = new AttributeNonNullFilterBuilder(c);
             builders.add(b);
         }
@@ -93,7 +92,7 @@ public class AttributeNonNullBuilder implements CategoryBuilder {
 
     private static class AttributeNonNullFilterBuilder extends AbstractAttributeFilterBuilder {
 
-        public AttributeNonNullFilterBuilder(AttributeColumn column) {
+        public AttributeNonNullFilterBuilder(Column column) {
             super(column,
                     NONNULL,
                     NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeNonNullBuilder.description"),
@@ -112,17 +111,17 @@ public class AttributeNonNullBuilder implements CategoryBuilder {
 
     public static class AttributeNonNullFilter extends AbstractAttributeFilter {
 
-        public AttributeNonNullFilter(AttributeColumn column) {
+        public AttributeNonNullFilter(Column column) {
             super(NbBundle.getMessage(AttributeEqualBuilder.class, "AttributeNonNullBuilder.name"),
                     column);
         }
 
         public boolean init(Graph graph) {
-            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+            if (AttributeUtils.isNodeColumn(column)) {
                 if (graph.getNodeCount() == 0) {
                     return false;
                 }
-            } else if (AttributeUtils.getDefault().isEdgeColumn(column)) {
+            } else if (AttributeUtils.isEdgeColumn(column)) {
                 if (graph.getEdgeCount() == 0) {
                     return false;
                 }
@@ -130,8 +129,9 @@ public class AttributeNonNullBuilder implements CategoryBuilder {
             return true;
         }
 
-        public boolean evaluate(Graph graph, Attributable attributable) {
-            return attributable.getAttributes().getValue(column.getIndex()) != null;
+        public boolean evaluate(Graph graph, Element element) {
+            return element.getAttribute(column) != null;
+//            return element.getAttributes().getValue(column.getIndex()) != null;
         }
 
         public void finish() {

@@ -41,12 +41,14 @@
  */
 package org.gephi.filters;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
 import java.beans.PropertyEditorManager;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.api.AttributeOrigin;
-import org.gephi.data.attributes.api.AttributeType;
+import javax.swing.text.html.HTML;
+import org.gephi.attribute.api.AttributeModel;
+import org.gephi.attribute.api.Column;
+import org.gephi.attribute.api.Origin;
+//import org.gephi.data.attributes.api.AttributeOrigin;
+//import org.gephi.data.attributes.api.AttributeType;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.PropertyExecutor;
@@ -86,7 +88,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
     public FilterControllerImpl() {
         //Register range editor
         PropertyEditorManager.registerEditor(Range.class, RangePropertyEditor.class);
-        PropertyEditorManager.registerEditor(AttributeColumn.class, AttributeColumnPropertyEditor.class);
+        PropertyEditorManager.registerEditor(Column.class, AttributeColumnPropertyEditor.class);
 
         //Model management
         ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
@@ -157,7 +159,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
 
             for (Query q : query.getDescendantsAndSelf()) {
                 Filter filter = q.getFilter();
-                if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof ElementFilter) {
+                if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof AttributeFilter) {
                     FilterProcessor filterProcessor = new FilterProcessor();
                     filterProcessor.init(filter, graph);
                 }
@@ -192,7 +194,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
                 graph = graphModel.getGraph();
             }
             Filter filter = subQuery.getFilter();
-            if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof ElementFilter) {
+            if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof AttributeFilter) {
                 FilterProcessor filterProcessor = new FilterProcessor();
                 filterProcessor.init(filter, graph);
             }
@@ -281,12 +283,16 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             result = (Graph) processor.process((AbstractQueryImpl) query, graphModel);
         }
-        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
-        AttributeColumn nodeCol = am.getNodeTable().getColumn("filter_" + title);
+//        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
+        AttributeModel am = Lookup.getDefault().lookup(AttributeModel.class);
+//        AttributeColumn nodeCol = am.getNodeTable().getColumn("filter_" + title);
+        Column nodeCol = am.getNodeTable().getColumn("filter_" + title);
         if (nodeCol == null) {
-            nodeCol = am.getNodeTable().addColumn("filter_" + title, title, AttributeType.BOOLEAN, AttributeOrigin.COMPUTED, Boolean.FALSE);
+//            nodeCol = am.getNodeTable().addColumn("filter_" + title, title, AttributeType.BOOLEAN, AttributeOrigin.COMPUTED, Boolean.FALSE);
+            // A guess: still working on this ...
+            nodeCol = am.getNodeTable().addColumn("filter_" + title, title, null, Origin.DATA, am, true);
         }
-        AttributeColumn edgeCol = am.getEdgeTable().getColumn("filter_" + title);
+        Column edgeCol = am.getEdgeTable().getColumn("filter_" + title);
         if (edgeCol == null) {
             edgeCol = am.getEdgeTable().addColumn("filter_" + title, title, AttributeType.BOOLEAN, AttributeOrigin.COMPUTED, Boolean.FALSE);
         }
