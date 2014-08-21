@@ -47,7 +47,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JPanel;
 import org.gephi.attribute.api.Column;
-import org.gephi.data.attributes.api.AttributeUtils;
+import org.gephi.attribute.api.AttributeUtils;
 import org.gephi.filters.api.FilterLibrary;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.CategoryBuilder;
@@ -139,7 +139,7 @@ public class PartitionBuilder implements CategoryBuilder {
         }
 
         public PartitionFilter getFilter() {
-            if (AttributeUtils.getDefault().isNodeColumn(column)) {
+            if (AttributeUtils.isNodeColumn(column)) {
                 return new NodePartitionFilter(partition);
             } else {
                 return new EdgePartitionFilter(partition);
@@ -266,7 +266,7 @@ public class PartitionBuilder implements CategoryBuilder {
         public Partition getCurrentPartition() {
             if (partition.getPartsCount() == 0) {
                 //build partition
-                GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getModel();
+                GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class);
                 this.partition = Lookup.getDefault().lookup(PartitionController.class).buildPartition(partition.getColumn(), graphModel.getGraphVisible());
             }
             return partition;
