@@ -69,6 +69,7 @@ public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
     @Override
     public String getAsText() {
         if (column != null) {
+            //AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
             AttributeModel model = Lookup.getDefault().lookup(AttributeModel.class);
             if (model.getNodeTable().hasColumn(column.getTitle())) {
                 return "NODE*-*" + column.getId() + "*-*" + column.getTypeClass().getSimpleName();
@@ -83,12 +84,13 @@ public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
         if (!text.equals("null")) {
+//            AttributeModel model = Lookup.getDefault().lookup(AttributeController.class).getModel();
             AttributeModel model = Lookup.getDefault().lookup(AttributeModel.class);
             String[] arr = text.split("\\*-\\*");
             if (arr[0].equals("NODE")) {
-                column = model.getNodeTable().getColumn(arr[1]);
+                column = model.getNodeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));
             } else if (arr[0].equals("EDGE")) {
-                column = model.getEdgeTable().getColumn(arr[1]);
+                column = model.getEdgeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));
             }
         }
     }
