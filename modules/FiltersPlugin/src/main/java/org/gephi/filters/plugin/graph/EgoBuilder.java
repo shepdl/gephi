@@ -109,9 +109,9 @@ public class EgoBuilder implements FilterBuilder {
 
             List<Node> nodes = new ArrayList<Node>();
             for (Node n : graph.getNodes()) {
-                if (n.getNodeData().getId().toLowerCase().equals(str)) {
+                if (n.getId().equals(str)) {
                     nodes.add(n);
-                } else if ((n.getNodeData().getLabel() != null) && n.getNodeData().getLabel().toLowerCase().equals(str)) {
+                } else if (n.getLabel() != null && n.getLabel().toLowerCase().equals(str)) {
                     nodes.add(n);
                 }
             }
