@@ -41,6 +41,7 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.ui.filters.plugin.attribute;
 
+import java.lang.reflect.Constructor;
 import java.text.DecimalFormat;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
@@ -81,25 +82,21 @@ public class EqualNumberPanel extends javax.swing.JPanel implements ChangeListen
                 Number stepSize = null;
                 final Comparable min = (Comparable) filter.getRange().getMinimum();
                 final Comparable max = (Comparable) filter.getRange().getMaximum();
-                switch (filter.getColumn().getType()) {
-                    case DOUBLE:
-                        match = (match != null ? match : new Double((Double) min));
-                        stepSize = new Double(.1);
-                        break;
-                    case FLOAT:
-                        match = (match != null ? match : new Float((Float) min));
-                        stepSize = new Float(.1f);
-                        break;
-                    case LONG:
-                        match = (match != null ? match : new Long((Long) min));
-                        stepSize = new Long(1l);
-                        break;
-                    case INT:
-                        match = (match != null ? match : new Integer((Integer) min));
-                        stepSize = 1;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Column must be number");
+                Class filterType = filter.getColumn().getTypeClass();
+                if (filterType == Double.class) {
+                    if (match == null) match = new Double((Double) min);
+                    stepSize = new Double(.1);
+                } else if (filterType == Float.class) {
+                    if (match == null) match = new Float((Float) min);
+                    stepSize = new Float(.1f);
+                } else if (filterType == Long.class) {
+                    if (match == null) match = new Long((Long) min);
+                    stepSize = new Long(1L);
+                } else if (filterType == Integer.class) {
+                    if (match == null) match = new Integer((Integer) min);
+                    stepSize = 1;
+                } else {
+                    throw new IllegalArgumentException("Column must be number");
                 }
                 Number minNumber = (Number) min;
                 Number maxNumber = (Number) max;
