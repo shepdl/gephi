@@ -50,28 +50,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.AbstractTableModel;
-import org.gephi.data.attributes.api.AttributeColumn;
-import org.gephi.data.attributes.api.AttributeRow;
-import org.gephi.data.attributes.api.AttributeType;
-import org.gephi.data.attributes.api.AttributeUtils;
-import org.gephi.data.attributes.type.*;
+import org.gephi.attribute.api.AttributeUtils;
+import org.gephi.attribute.api.Column;
 import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.datalab.api.DataLaboratoryHelper;
 import org.gephi.datalab.spi.edges.EdgesManipulator;
 import org.gephi.desktop.datalab.utils.PopupMenuUtils;
-import org.gephi.desktop.datalab.utils.SparkLinesRenderer;
-import org.gephi.desktop.datalab.utils.TimeIntervalCellEditor;
-import org.gephi.desktop.datalab.utils.TimeIntervalsRenderer;
-import org.gephi.dynamic.api.DynamicController;
-import org.gephi.dynamic.api.DynamicModel;
-import org.gephi.dynamic.api.DynamicModel.TimeFormat;
 import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.graph.api.Graph;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.table.TableColumnExt;
@@ -93,19 +85,17 @@ public class EdgeDataTable {
     private PropertyEdgeDataColumn[] propertiesColumns;
     private RowFilter rowFilter;
     private Edge[] selectedEdges;
-    private AttributeUtils attributeUtils;
     private AttributeColumnsController attributeColumnsController;
     private boolean refreshingTable = false;
-    private AttributeColumn[] showingColumns = null;
+    private Column[] showingColumns = null;
     private static final int FAKE_COLUMNS_COUNT = 3;
     private EdgeDataTableModel model;
-    private TimeIntervalsRenderer timeIntervalsRenderer;
-    private TimeIntervalCellEditor timeIntervalCellEditor;
-    private TimeFormat currentTimeFormat;
-    private SparkLinesRenderer sparkLinesRenderer;
+//    private TimeIntervalsRenderer timeIntervalsRenderer;
+//    private TimeIntervalCellEditor timeIntervalCellEditor;
+//    private TimeFormat currentTimeFormat;
+//    private SparkLinesRenderer sparkLinesRenderer;
 
     public EdgeDataTable() {
-        attributeUtils = AttributeUtils.getDefault();
         attributeColumnsController = Lookup.getDefault().lookup(AttributeColumnsController.class);
 
         table = new JXTable();
@@ -127,9 +117,9 @@ public class EdgeDataTable {
             @Override
             public Object getValueFor(Edge edge) {
                 if (showEdgesNodesLabels) {
-                    return edge.getSource().getNodeData().getId() + " - " + edge.getSource().getNodeData().getLabel();
+                    return edge.getSource().getId() + " - " + edge.getSource().getLabel();
                 } else {
-                    return edge.getSource().getNodeData().getId();
+                    return edge.getSource().getId();
                 }
             }
         };
@@ -144,9 +134,9 @@ public class EdgeDataTable {
             @Override
             public Object getValueFor(Edge edge) {
                 if (showEdgesNodesLabels) {
-                    return edge.getTarget().getNodeData().getId() + " - " + edge.getTarget().getNodeData().getLabel();
+                    return edge.getTarget().getId() + " - " + edge.getTarget().getLabel();
                 } else {
-                    return edge.getTarget().getNodeData().getId();
+                    return edge.getTarget().getId();
                 }
             }
         };
@@ -206,39 +196,29 @@ public class EdgeDataTable {
     }
 
     private void prepareRenderers() {
-        DynamicModel dm = Lookup.getDefault().lookup(DynamicController.class).getModel();
-        table.setDefaultRenderer(NumberList.class, sparkLinesRenderer = new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicBigDecimal.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicBigInteger.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicByte.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicDouble.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicFloat.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicInteger.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicLong.class, new SparkLinesRenderer());
-        table.setDefaultRenderer(DynamicShort.class, new SparkLinesRenderer());
-        double min, max;
-        if (dm != null) {
-            min = dm.getMin();
-            max = dm.getMax();
-        } else {
-            min = Double.NEGATIVE_INFINITY;
-            max = Double.POSITIVE_INFINITY;
-        }
-        table.setDefaultRenderer(TimeInterval.class, timeIntervalsRenderer = new TimeIntervalsRenderer(min, max, timeIntervalGraphics));
-
-        //Use default string editor for them:
-        table.setDefaultEditor(String.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(NumberList.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicBigDecimal.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicBigInteger.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicByte.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicDouble.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicFloat.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicInteger.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicLong.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(DynamicShort.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(TimeInterval.class, new DefaultCellEditor(new JTextField()));
-        table.setDefaultEditor(TimeInterval.class, timeIntervalCellEditor = new TimeIntervalCellEditor(new JTextField()));
+        //TODO: adapt dynamics
+//        DynamicModel dm = Lookup.getDefault().lookup(DynamicController.class).getModel();
+//        table.setDefaultRenderer(NumberList.class, sparkLinesRenderer = new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicBigDecimal.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicBigInteger.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicByte.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicDouble.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicFloat.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicInteger.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicLong.class, new SparkLinesRenderer());
+//        table.setDefaultRenderer(DynamicShort.class, new SparkLinesRenderer());
+//        double min, max;
+//        if (dm != null) {
+//            min = dm.getMin();
+//            max = dm.getMax();
+//        } else {
+//            min = Double.NEGATIVE_INFINITY;
+//            max = Double.POSITIVE_INFINITY;
+//        }
+//        table.setDefaultRenderer(TimeInterval.class, timeIntervalsRenderer = new TimeIntervalsRenderer(min, max, timeIntervalGraphics));
+//
+//        //Use default string editor for them:
+//        table.setDefaultEditor(TimeInterval.class, timeIntervalCellEditor = new TimeIntervalCellEditor(new JTextField()));
     }
 
     public JXTable getTable() {
@@ -258,17 +238,18 @@ public class EdgeDataTable {
         return true;
     }
 
-    public void refreshModel(HierarchicalGraph graph, AttributeColumn[] cols, DataTablesModel dataTablesModel) {
+    public void refreshModel(Graph graph, Column[] cols, DataTablesModel dataTablesModel) {
         showingColumns = cols;
-        DynamicModel dm = Lookup.getDefault().lookup(DynamicController.class).getModel();
-        if (dm != null) {
-            timeIntervalsRenderer.setMinMax(dm.getMin(), dm.getMax());
-            currentTimeFormat = dm.getTimeFormat();
-            timeIntervalsRenderer.setTimeFormat(currentTimeFormat);
-            timeIntervalCellEditor.setTimeFormat(currentTimeFormat);
-            sparkLinesRenderer.setTimeFormat(currentTimeFormat);
-        }
-        timeIntervalsRenderer.setDrawGraphics(timeIntervalGraphics);
+        //TODO: adapt dynamics
+//        DynamicModel dm = Lookup.getDefault().lookup(DynamicController.class).getModel();
+//        if (dm != null) {
+//            timeIntervalsRenderer.setMinMax(dm.getMin(), dm.getMax());
+//            currentTimeFormat = dm.getTimeFormat();
+//            timeIntervalsRenderer.setTimeFormat(currentTimeFormat);
+//            timeIntervalCellEditor.setTimeFormat(currentTimeFormat);
+//            sparkLinesRenderer.setTimeFormat(currentTimeFormat);
+//        }
+//        timeIntervalsRenderer.setDrawGraphics(timeIntervalGraphics);
         refreshingTable = true;
         if (selectedEdges == null) {
             selectedEdges = getEdgesFromSelectedRows();
@@ -276,16 +257,15 @@ public class EdgeDataTable {
         ArrayList<EdgeDataColumn> columns = new ArrayList<EdgeDataColumn>();
         columns.addAll(Arrays.asList(propertiesColumns));
 
-        for (AttributeColumn c : cols) {
+        for (Column c : cols) {
             columns.add(new AttributeEdgeDataColumn(c));
         }
 
         if (model == null) {
-            model = new EdgeDataTableModel(graph.getEdgesAndMetaEdges().toArray(), columns.toArray(new EdgeDataColumn[0]));
+            model = new EdgeDataTableModel(graph.getEdges().toArray(), columns.toArray(new EdgeDataColumn[0]));
             table.setModel(model);
         } else {
-            model.setEdges(graph.getEdgesAndMetaEdges().toArray());
-            model.setColumns(columns.toArray(new EdgeDataColumn[0]));
+            model.configure(graph.getEdges().toArray(), columns.toArray(new EdgeDataColumn[0]));
         }
 
         setEdgesSelection(selectedEdges);//Keep row selection before refreshing.
@@ -357,8 +337,8 @@ public class EdgeDataTable {
         TableColumnModelExt columnModel = (TableColumnModelExt) table.getColumnModel();
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
             TableColumnExt col = columnModel.getColumnExt(i);
-            for (int j = 0; j < columns.length; j++) {
-                if (columns[j].equals(col.getHeaderValue())) {
+            for (String column : columns) {
+                if (column.equals(col.getHeaderValue())) {
                     col.setVisible(false);
                 }
             }
@@ -415,21 +395,23 @@ public class EdgeDataTable {
             return columns;
         }
 
-        public void setColumns(EdgeDataColumn[] columns) {
-            boolean columnsChanged = columns.length != this.columns.length;
-            this.columns = columns;
-            if (columnsChanged) {
-                fireTableStructureChanged();
-            }
-        }
-
         public Edge[] getEdges() {
             return edges;
         }
+        
+        public void configure(Edge[] edges, EdgeDataColumn[] columns){
+            Set<EdgeDataColumn> oldColumns = new HashSet<EdgeDataColumn>(Arrays.asList(this.columns));
+            Set<EdgeDataColumn> newColumns = new HashSet<EdgeDataColumn>(Arrays.asList(columns));
 
-        public void setEdges(Edge[] edges) {
+            boolean columnsChanged = !oldColumns.equals(newColumns);
+            this.columns = columns;
             this.edges = edges;
-            fireTableDataChanged();
+            
+            if (columnsChanged) {
+                fireTableStructureChanged();//Only firing this event if columns change is useful because JXTable will not reset columns width if there is no change
+            }else{
+                fireTableDataChanged();
+            }
         }
     }
 
@@ -448,25 +430,21 @@ public class EdgeDataTable {
 
     private class AttributeEdgeDataColumn implements EdgeDataTable.EdgeDataColumn {
 
-        private AttributeColumn column;
+        private final Column column;
 
-        public AttributeEdgeDataColumn(AttributeColumn column) {
+        public AttributeEdgeDataColumn(Column column) {
             this.column = column;
         }
 
         public Class getColumnClass() {
-            if (useSparklines && attributeUtils.isNumberListColumn(column)) {
-                return NumberList.class;
-            } else if (useSparklines && attributeUtils.isDynamicNumberColumn(column)) {
-                return column.getType().getType();
-            } else if (column.getType() == AttributeType.TIME_INTERVAL) {
-                return TimeInterval.class;
-            } else if (attributeUtils.isNumberColumn(column)) {
-                return column.getType().getType();//Number columns should not be treated as Strings because the sorting would be alphabetic instead of numeric
-            } else if (column.getType() == AttributeType.BOOLEAN) {
+            if (useSparklines && AttributeUtils.isDynamicType(column.getTypeClass())) {
+                return column.getTypeClass();//TODO update dynamics
+            } else if (Number.class.isAssignableFrom(column.getTypeClass())) {
+                return column.getTypeClass();//Number columns should not be treated as Strings because the sorting would be alphabetic instead of numeric
+            } else if (column.getTypeClass() == Boolean.class) {
                 return Boolean.class;
             } else {
-                return String.class;//Treat all columns as Strings. Also fix the fact that the table implementation does not allow to edit Character cells.
+                return String.class;//Treat all other columns as Strings. Also fix the fact that the table implementation does not allow to edit Character cells.
             }
         }
 
@@ -475,31 +453,50 @@ public class EdgeDataTable {
         }
 
         public Object getValueFor(Edge edge) {
-            Object value = edge.getEdgeData().getAttributes().getValue(column.getIndex());
-            if (useSparklines && (attributeUtils.isNumberListColumn(column) || attributeUtils.isDynamicNumberColumn(column))) {
+            Object value = edge.getAttribute(column);
+            if (useSparklines && AttributeUtils.isDynamicType(column.getTypeClass())) {
                 return value;
-            } else if (column.getType() == AttributeType.TIME_INTERVAL) {
+            } else if (Number.class.isAssignableFrom(column.getTypeClass())) {
                 return value;
-            } else if (attributeUtils.isNumberColumn(column)) {
-                return value;
-            } else if (column.getType() == AttributeType.BOOLEAN) {
+            } else if (column.getTypeClass() == Boolean.class) {
                 return value;
             } else {
                 //Show values as Strings like in Edit window and other parts of the program to be consistent
                 if (value != null) {
-                    if (value instanceof DynamicType) {//When type is dynamic, take care to show proper time format
-                        return ((DynamicType) value).toString(currentTimeFormat == TimeFormat.DOUBLE);
-                    } else {
+//                    if (value instanceof TimestampSet) {//When type is dynamic, take care to show proper time format
+//                        return ((TimestampSet) value).toString(currentTimeFormat == TimeFormat.DOUBLE);
+//                    } else {
                         return value.toString();
-                    }
+//                    }
                 } else {
                     return null;
                 }
             }
+            
+            
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 89 * hash + (this.column != null ? this.column.hashCode() : 0);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final AttributeEdgeDataColumn other = (AttributeEdgeDataColumn) obj;
+            return this.column == other.column || (this.column != null && this.column.equals(other.column));
         }
 
         public void setValueFor(Edge edge, Object value) {
-            attributeColumnsController.setAttributeValue(value, edge.getEdgeData().getAttributes(), column);
+            attributeColumnsController.setAttributeValue(value, edge, column);
         }
 
         public boolean isEditable() {
@@ -509,7 +506,7 @@ public class EdgeDataTable {
 
     private abstract class PropertyEdgeDataColumn implements EdgeDataTable.EdgeDataColumn {
 
-        private String name;
+        private final String name;
 
         public PropertyEdgeDataColumn(String name) {
             this.name = name;
@@ -607,12 +604,11 @@ public class EdgeDataTable {
             }
 
             //Add AttributeValues manipulators submenu:
-            AttributeRow row = (AttributeRow) clickedEdge.getEdgeData().getAttributes();
             int realColumnIndex = table.convertColumnIndexToModel(table.columnAtPoint(p)) - FAKE_COLUMNS_COUNT;//Get real attribute column index not counting fake columns.
             if (realColumnIndex >= 0) {
-                AttributeColumn column = showingColumns[realColumnIndex];
+                Column column = showingColumns[realColumnIndex];
                 if (column != null) {
-                    contextMenu.add(PopupMenuUtils.createSubMenuFromRowColumn(row, column));
+                    contextMenu.add(PopupMenuUtils.createSubMenuFromRowColumn(clickedEdge, column));
                 }
             }
             return contextMenu;
