@@ -61,11 +61,11 @@ import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
-import org.gephi.partition.api.EdgePartition;
-import org.gephi.partition.api.NodePartition;
-import org.gephi.partition.api.Part;
-import org.gephi.partition.api.Partition;
-import org.gephi.partition.api.PartitionController;
+//import org.gephi.partition.api.EdgePartition;
+//import org.gephi.partition.api.NodePartition;
+//import org.gephi.partition.api.Part;
+//import org.gephi.partition.api.Partition;
+//import org.gephi.partition.api.PartitionController;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -89,6 +89,7 @@ public class PartitionBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
+        /*
         PartitionController pc = Lookup.getDefault().lookup(PartitionController.class);
         if (pc.getModel() != null) {
             pc.refreshPartitions();
@@ -104,9 +105,11 @@ public class PartitionBuilder implements CategoryBuilder {
             }
         }
 
+                */
         return builders.toArray(new FilterBuilder[0]);
     }
 
+    /*
     private static class PartitionFilterBuilder implements FilterBuilder {
 
         private final Column column;
@@ -295,4 +298,5 @@ public class PartitionBuilder implements CategoryBuilder {
             this.partition = partition;
         }
     }
+    */
 }

@@ -53,7 +53,7 @@ import org.gephi.filters.plugin.graph.RangeUI;
 import org.gephi.filters.spi.*;
 import org.gephi.graph.api.Element;
 import org.gephi.graph.api.Graph;
-import org.gephi.partition.api.*;
+//import org.gephi.partition.api.*;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -76,6 +76,7 @@ public class PartitionCountBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
+        /*
         PartitionController pc = Lookup.getDefault().lookup(PartitionController.class);
         if (pc.getModel() != null) {
             pc.refreshPartitions();
@@ -90,10 +91,12 @@ public class PartitionCountBuilder implements CategoryBuilder {
                 builders.add(builder);
             }
         }
+                */
 
         return builders.toArray(new FilterBuilder[0]);
     }
 
+    /*
     private static class PartitionCountFilterBuilder extends AbstractAttributeFilterBuilder {
 
         private Partition partition;
@@ -179,4 +182,5 @@ public class PartitionCountBuilder implements CategoryBuilder {
             this.range = range;
         }
     }
+    */
 }

@@ -47,14 +47,14 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.appearance.api.EdgePartition;
-import org.gephi.appearance.api.NodePartition;
-import org.gephi.appearance.api.Part;
+//import org.gephi.appearance.api.EdgePartition;
+//import org.gephi.appearance.api.NodePartition;
+//import org.gephi.appearance.api.Part;
 import org.gephi.appearance.api.Partition;
-import org.gephi.appearance.api.PartitionController;
+//import org.gephi.appearance.api.PartitionController;
 import org.gephi.attribute.api.Column;
 import org.gephi.filters.api.FilterLibrary;
-import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
+//import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.CategoryBuilder;
 import org.gephi.filters.spi.EdgeFilter;
@@ -84,6 +84,7 @@ public class InterEdgesBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
+        /*
         PartitionController pc = Lookup.getDefault().lookup(PartitionController.class);
         if (pc.getModel() != null) {
             pc.refreshPartitions();
@@ -93,10 +94,12 @@ public class InterEdgesBuilder implements CategoryBuilder {
                 builders.add(builder);
             }
         }
+                */
 
         return builders.toArray(new FilterBuilder[0]);
     }
 
+    /*
     private static class InterEdgesFilterBuilder implements FilterBuilder {
 
         private final Column column;
@@ -177,4 +180,5 @@ public class InterEdgesBuilder implements CategoryBuilder {
             partsValue = null;
         }
     }
+    */
 }

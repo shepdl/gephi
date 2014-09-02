@@ -1232,5 +1232,7 @@
         <module>modules/UILibraryWrapper</module>
         <module>modules/FiltersAPI</module>
         <module>modules/FiltersImpl</module>
+        <module>modules/FiltersPlugin</module>
+        <module>modules/FiltersPluginUI</module>
     </modules>
 </project>

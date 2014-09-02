@@ -138,6 +138,7 @@ public class MASKBuilderEdge implements FilterBuilder {
             GraphView hgraphView = graph.getView();
             Graph mainGraph = graph.getView().getGraphModel().getGraph();
 
+            /*
             List<Edge> edgesToKeep = new ArrayList<Edge>();
             for (Edge e : mainGraph.getEdges().toArray()) {
                 Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
@@ -173,6 +174,7 @@ public class MASKBuilderEdge implements FilterBuilder {
             for (Edge e : edgesToKeep) {
                 graph.addEdge(e);
             }
+                    */
 
             return graph;
         }
@@ -181,6 +183,7 @@ public class MASKBuilderEdge implements FilterBuilder {
             if (filters.length > 1) {
                 throw new IllegalArgumentException("Filter accepts a single filter in parameter");
             }
+            /*
             if (filters[0] instanceof NodeFilter && ((NodeFilter) filters[0]).init(graph)) {
                 NodeFilter filter = (NodeFilter) filters[0];
                 GraphView hgraphView = graph.getView();
@@ -208,6 +211,7 @@ public class MASKBuilderEdge implements FilterBuilder {
                 }
                 filter.finish();
             }
+                    */
             return graph;
         }
 

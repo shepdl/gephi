@@ -47,7 +47,7 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import org.gephi.attribute.api.Column;
 import org.gephi.filters.api.FilterLibrary;
-import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
+//import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.CategoryBuilder;
 import org.gephi.filters.spi.EdgeFilter;
@@ -55,10 +55,10 @@ import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-import org.gephi.partition.api.EdgePartition;
-import org.gephi.partition.api.NodePartition;
-import org.gephi.partition.api.Partition;
-import org.gephi.partition.api.PartitionController;
+//import org.gephi.partition.api.EdgePartition;
+//import org.gephi.partition.api.NodePartition;
+//import org.gephi.partition.api.Partition;
+//import org.gephi.partition.api.PartitionController;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -81,6 +81,7 @@ public class IntraEdgesBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
+        /*
         PartitionController pc = Lookup.getDefault().lookup(PartitionController.class);
         if (pc.getModel() != null) {
             pc.refreshPartitions();
@@ -90,10 +91,12 @@ public class IntraEdgesBuilder implements CategoryBuilder {
                 builders.add(builder);
             }
         }
+                */
 
         return builders.toArray(new FilterBuilder[0]);
     }
 
+    /*
     private static class IntraEdgesFilterBuilder implements FilterBuilder {
 
         private final Column column;
@@ -164,4 +167,5 @@ public class IntraEdgesBuilder implements CategoryBuilder {
             return false;
         }
     }
+    */
 }

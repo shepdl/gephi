@@ -20,10 +20,12 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>data-attributes-api</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>filters-api</artifactId>
@@ -41,10 +43,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>utils-longtask</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>visualization-api</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>

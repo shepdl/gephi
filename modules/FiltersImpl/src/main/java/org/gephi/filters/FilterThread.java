@@ -48,13 +48,13 @@ import org.gephi.filters.api.PropertyExecutor.Callback;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.spi.FilterProperty;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
+//import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
 import org.gephi.utils.progress.ProgressTicketProvider;
-import org.gephi.visualization.api.VisualizationController;
+//import org.gephi.visualization.api.VisualizationController;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
@@ -145,7 +145,7 @@ public class FilterThread extends Thread {
 
     private void filter(AbstractQueryImpl query) {
         FilterProcessor processor = new FilterProcessor();
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
         Graph result = processor.process((AbstractQueryImpl) query, graphModel);
 //        System.out.println("#Nodes: " + result.getNodeCount());
 //        System.out.println("#Edges: " + result.getEdgeCount());
@@ -164,16 +164,18 @@ public class FilterThread extends Thread {
 
     private void select(AbstractQueryImpl query) {
         FilterProcessor processor = new FilterProcessor();
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
         Graph result = processor.process((AbstractQueryImpl) query, graphModel);
 //        System.out.println("#Nodes: " + result.getNodeCount());
 //        System.out.println("#Edges: " + result.getEdgeCount());
         if (running) {
+            /*
             VisualizationController visController = Lookup.getDefault().lookup(VisualizationController.class);
             if (visController != null) {
                 visController.selectNodes(result.getNodes().toArray());
                 visController.selectEdges(result.getEdges().toArray());
             }
+                    */
             GraphView view = result.getView();
             model.setCurrentResult(view);
         } else {

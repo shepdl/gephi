@@ -44,8 +44,6 @@ package org.gephi.filters;
 import java.beans.PropertyEditorSupport;
 import org.gephi.attribute.api.Column;
 import org.gephi.attribute.api.AttributeModel;
-//import org.gephi.data.attributes.api.AttributeColumn;
-//import org.gephi.data.attributes.api.AttributeController;
 import org.openide.util.Lookup;
 
 /**
@@ -88,9 +86,9 @@ public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
             AttributeModel model = Lookup.getDefault().lookup(AttributeModel.class);
             String[] arr = text.split("\\*-\\*");
             if (arr[0].equals("NODE")) {
-                column = model.getNodeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));
+                column = model.getNodeTable().getColumn(arr[1]);
             } else if (arr[0].equals("EDGE")) {
-                column = model.getEdgeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));
+                column = model.getEdgeTable().getColumn(arr[1]);
             }
         }
     }

@@ -42,7 +42,7 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.filters.plugin.partition;
 
 import javax.swing.JPanel;
-import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
+//import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
 
 /**
  *
@@ -50,5 +50,5 @@ import org.gephi.filters.plugin.partition.PartitionBuilder.PartitionFilter;
  */
 public interface PartitionUI {
 
-    public JPanel getPanel(PartitionFilter filter);
+//    public JPanel getPanel(PartitionFilter filter);
 }

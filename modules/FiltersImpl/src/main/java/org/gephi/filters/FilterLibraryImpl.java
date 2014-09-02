@@ -50,7 +50,7 @@ import org.gephi.filters.spi.CategoryBuilder;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.filters.spi.FilterLibraryMask;
-import org.gephi.graph.api.GraphController;
+//import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;

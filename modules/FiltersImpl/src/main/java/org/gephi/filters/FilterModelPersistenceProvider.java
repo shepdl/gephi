@@ -53,7 +53,7 @@ import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.spi.*;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.GraphController;
+//import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.spi.WorkspacePersistenceProvider;
@@ -209,7 +209,7 @@ public class FilterModelPersistenceProvider implements WorkspacePersistenceProvi
         if (model != null && model.getGraphModel() != null) {
             graph = model.getGraphModel().getGraph();
         } else {
-            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
             graph = graphModel.getGraph();
         }
 

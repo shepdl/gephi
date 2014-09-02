@@ -107,11 +107,13 @@ public class NeighborsBuilder implements FilterBuilder {
         public Graph filter(Graph graph) {
 
             GraphView graphView = graph.getView();
-            Graph mainGraph = graphView.getGraphModel().getGraph();
+	    Graph subgraph = graphView.getGraphModel().getGraph(graphView);
+//            Graph mainGraph = graphView.getGraphModel().getGraph();
 
             List<Node> nodes = new ArrayList<Node>();
-            for (Node n : graph.getNodes()) {
-                nodes.add(n.getNodeData().getNode(mainGraph.getView().getViewId()));
+            for (Node n : subgraph.getNodes()) {
+//                nodes.add(n.getNodeData().getNode(mainGraph.getView().getViewId()));
+		nodes.add(n);
             }
 
             Set<Node> result = new HashSet<Node>();
@@ -125,7 +127,8 @@ public class NeighborsBuilder implements FilterBuilder {
                 neighbours.clear();
                 for (Node n : nei) {
                     //Extract all neighbors of n
-                    for (Node neighbor : mainGraph.getNeighbors(n)) {
+//                    for (Node neighbor : mainGraph.getNeighbors(n)) {
+		    for (Node neighbor : subgraph.getNeighbors(n)) {
                         if (!result.contains(neighbor)) {
                             neighbours.add(neighbor);
                             result.add(neighbor);
@@ -144,7 +147,8 @@ public class NeighborsBuilder implements FilterBuilder {
             }
 
             //Update nodes
-            for (Node node : mainGraph.getNodes().toArray()) {
+//            for (Node node : mainGraph.getNodes().toArray()) {
+	    for (Node node : subgraph.getNodes().toArray()) {
                 if (result.contains(node)) {
                     graph.addNode(node);
                 } else if(graph.contains(node)) {
@@ -153,6 +157,8 @@ public class NeighborsBuilder implements FilterBuilder {
             }
 
             //Update edges
+	    // TODO: check why update the graph here?
+	    /*
             for (Node n : graph.getNodes().toArray()) {
                 Node mainNode = n.getNodeData().getNode(mainGraph.getView().getViewId());
                 Edge[] edges = mainGraph.getEdges(mainNode).toArray();
@@ -163,6 +169,7 @@ public class NeighborsBuilder implements FilterBuilder {
                     }
                 }
             }
+		    */
 
             return graph;
         }

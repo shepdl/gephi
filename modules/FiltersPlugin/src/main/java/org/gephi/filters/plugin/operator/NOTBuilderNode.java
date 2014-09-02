@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.filters.spi.AttributableFilter;
+//import org.gephi.filters.spi.AttributableFilter;
 import org.gephi.filters.spi.Category;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
@@ -114,6 +114,7 @@ public class NOTBuilderNode implements FilterBuilder {
             Graph hgraph = graphs[0];
             GraphView hgraphView = hgraph.getView();
             Graph mainGraph = hgraph.getView().getGraphModel().getGraph();
+            /*
             for (Node n : mainGraph.getNodes().toArray()) {
                 if (n.getNodeData().getNode(hgraphView.getViewId()) == null) {
                     //The node n is not in graph
@@ -134,6 +135,7 @@ public class NOTBuilderNode implements FilterBuilder {
                     }
                 }
             }
+                    */
 
             return hgraph;
         }
@@ -157,6 +159,7 @@ public class NOTBuilderNode implements FilterBuilder {
                 nodeFilter.finish();
             }
             
+            /*
             if (filter instanceof AttributableFilter && ((AttributableFilter) filter).getType()==AttributableFilter.Type.NODE && ((AttributableFilter) filter).init(graph)) {
                 List<Node> nodeToRemove = new ArrayList<Node>();
                 AttributableFilter attributableFilter = (AttributableFilter) filter;
@@ -170,6 +173,7 @@ public class NOTBuilderNode implements FilterBuilder {
                 }
                 attributableFilter.finish();
             }
+                    */
 
             return graph;
         }

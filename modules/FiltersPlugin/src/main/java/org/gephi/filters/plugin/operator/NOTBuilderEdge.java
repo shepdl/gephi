@@ -112,6 +112,7 @@ public class NOTBuilderEdge implements FilterBuilder {
             }
 
             Graph graph =  graphs[0];
+            /*
             GraphView hgraphView = graph.getView();
             Graph mainGraph = graph.getView().getGraphModel().getGraph();
             for (Edge e : mainGraph.getEdges().toArray()) {
@@ -128,6 +129,7 @@ public class NOTBuilderEdge implements FilterBuilder {
                     }
                 }
             }
+                    */
             return graph;
         }
 
