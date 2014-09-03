@@ -42,7 +42,7 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.filters.plugin.dynamic;
 
 import javax.swing.JPanel;
-//import org.gephi.filters.plugin.dynamic.DynamicRangeBuilder.DynamicRangeFilter;
+import org.gephi.filters.plugin.dynamic.DynamicRangeBuilder.DynamicRangeFilter;
 
 /**
  *
@@ -50,5 +50,5 @@ import javax.swing.JPanel;
  */
 public interface DynamicRangeUI {
 
-//    public JPanel getPanel(DynamicRangeFilter filter);
+    public JPanel getPanel(DynamicRangeFilter filter);
 }

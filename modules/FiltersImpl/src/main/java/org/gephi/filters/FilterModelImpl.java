@@ -51,7 +51,7 @@ import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.spi.Filter;
 import org.gephi.filters.spi.FilterBuilder;
-//import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.project.api.Workspace;
@@ -82,7 +82,7 @@ public class FilterModelImpl implements FilterModel {
         listeners = new ArrayList<ChangeListener>();
         autoRefresh = true;
 
-        graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel(workspace);
+        graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
         autoRefreshor = new FilterAutoRefreshor(this, graphModel);
     }
 

@@ -47,29 +47,26 @@ import javax.swing.text.html.HTML;
 import org.gephi.attribute.api.AttributeModel;
 import org.gephi.attribute.api.Column;
 import org.gephi.attribute.api.Origin;
-//import org.gephi.data.attributes.api.AttributeOrigin;
-//import org.gephi.data.attributes.api.AttributeType;
+import org.gephi.filters.FilterThread.PropertyModifier;
 import org.gephi.filters.api.FilterController;
 import org.gephi.filters.api.FilterModel;
 import org.gephi.filters.api.PropertyExecutor;
 import org.gephi.filters.api.Query;
 import org.gephi.filters.api.Range;
-import org.gephi.filters.FilterThread.PropertyModifier;
 import org.gephi.filters.spi.*;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
-//import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.graph.api.Node;
 import org.gephi.project.api.ProjectController;
-import org.gephi.utils.progress.Progress;
-import org.gephi.utils.progress.ProgressTicket;
-import org.gephi.utils.progress.ProgressTicketProvider;
 import org.gephi.project.api.Workspace;
 import org.gephi.project.api.WorkspaceInformation;
 import org.gephi.project.api.WorkspaceListener;
-//import org.gephi.visualization.api.VisualizationController;
+import org.gephi.utils.progress.Progress;
+import org.gephi.utils.progress.ProgressTicket;
+import org.gephi.utils.progress.ProgressTicketProvider;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
@@ -117,7 +114,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             }
 
             public void disable() {
-                GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
+                GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
                 if (model != null && model.getCurrentResult() != null && graphModel != null) {
                     graphModel.destroyView(model.getCurrentResult());
                     model.setCurrentResult(null);
@@ -153,7 +150,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             if (model != null && model.getGraphModel() != null) {
                 graph = model.getGraphModel().getGraph();
             } else {
-                GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
+                GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
                 graph = graphModel.getGraph();
             }
 
@@ -190,7 +187,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             if (model != null && model.getGraphModel() != null) {
                 graph = model.getGraphModel().getGraph();
             } else {
-                GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
+                GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
                 graph = graphModel.getGraph();
             }
             Filter filter = subQuery.getFilter();
@@ -234,7 +231,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
 
     public GraphView filter(Query query) {
         FilterProcessor processor = new FilterProcessor();
-        GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
         Graph result = processor.process((AbstractQueryImpl) query, graphModel);
         return result.getView();
     }
@@ -282,7 +279,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             result = model.getGraphModel().getGraph(view);
         } else {
             FilterProcessor processor = new FilterProcessor();
-            GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             result = (Graph) processor.process((AbstractQueryImpl) query, graphModel);
         }
         AttributeModel am = Lookup.getDefault().lookup(AttributeModel.class);
@@ -315,7 +312,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
             result = model.getGraphModel().getGraph(view);
         } else {
             FilterProcessor processor = new FilterProcessor();
-            GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); //.getGraphModel();
+            GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
             result = (Graph) processor.process((AbstractQueryImpl) query, graphModel);
         }
 
@@ -331,7 +328,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
                 Progress.start(ticket);
                 ProjectController pc = Lookup.getDefault().lookup(ProjectController.class);
                 Workspace newWorkspace = pc.duplicateWorkspace(pc.getCurrentWorkspace());
-                GraphModel graphModel = Lookup.getDefault().lookup(GraphModel.class); // .getGraphModel(newWorkspace);
+                GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(newWorkspace);
                 // TODO: this is the part I'm not sure about
                 graphModel.copyView(graphView.getView());
                 Progress.finish(ticket);

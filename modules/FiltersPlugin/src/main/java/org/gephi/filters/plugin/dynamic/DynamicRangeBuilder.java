@@ -45,10 +45,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JPanel;
+import org.gephi.attribute.api.AttributeModel;
 import org.gephi.attribute.api.Column;
-import org.gephi.data.attributes.api.AttributeController;
-import org.gephi.data.attributes.api.AttributeModel;
-import org.gephi.data.attributes.type.TimeInterval;
+import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.dynamic.api.DynamicController;
 import org.gephi.dynamic.api.DynamicModel;
 import org.gephi.dynamic.api.DynamicModelEvent;
@@ -63,8 +62,8 @@ import org.gephi.filters.spi.FilterProperty;
 import org.gephi.filters.spi.NodeFilter;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.Graph;
+import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.Node;
-//import org.gephi.timeline.api.TimelineController;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
@@ -76,17 +75,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = CategoryBuilder.class)
 public class DynamicRangeBuilder implements CategoryBuilder {
 
-    @Override
-    public FilterBuilder[] getBuilders() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Category getCategory() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /*
     private final static Category DYNAMIC = new Category(
             NbBundle.getMessage(DynamicRangeBuilder.class, "DynamicRangeBuilder.category"),
             null,
@@ -98,7 +86,9 @@ public class DynamicRangeBuilder implements CategoryBuilder {
 
     public FilterBuilder[] getBuilders() {
         List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
-        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
+//        AttributeModel am = Lookup.getDefault().lookup(AttributeController.class).getModel();
+        AttributeColumnsController acc = Lookup.getDefault().lookup(AttributeColumnsController.class);
+        AttributeModel am = Lookup.getDefault().lookup(GraphController.class).getAttributeModel();
         Column nodeColumn = am.getNodeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
         Column edgeColumn = am.getEdgeTable().getColumn(DynamicModel.TIMEINTERVAL_COLUMN);
         if (nodeColumn != null || edgeColumn != null) {
@@ -260,5 +250,4 @@ public class DynamicRangeBuilder implements CategoryBuilder {
             dynamicController.removeModelListener(this);
         }
     }
-    */
 }
