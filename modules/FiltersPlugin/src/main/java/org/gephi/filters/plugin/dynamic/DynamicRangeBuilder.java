@@ -47,6 +47,8 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import org.gephi.attribute.api.AttributeModel;
 import org.gephi.attribute.api.Column;
+import org.gephi.attribute.time.Interval;
+import org.gephi.timeline.TimelineController;
 import org.gephi.datalab.api.AttributeColumnsController;
 import org.gephi.dynamic.api.DynamicController;
 import org.gephi.dynamic.api.DynamicModel;
@@ -124,7 +126,6 @@ public class DynamicRangeBuilder implements CategoryBuilder {
         }
 
         public DynamicRangeFilter getFilter() {
-            TimelineController timelineController = Lookup.getDefault().lookup(TimelineController.class);
             DynamicController dynamicController = Lookup.getDefault().lookup(DynamicController.class);
             return new DynamicRangeFilter(timelineController, dynamicController, nodeColumn, edgeColumn);
         }
@@ -149,31 +150,35 @@ public class DynamicRangeBuilder implements CategoryBuilder {
         private Column edgeColumn;
         private DynamicController dynamicController;
         private DynamicModel dynamicModel;
-        private TimelineController timelineController;
-        private TimeInterval visibleInterval;
+        private Interval visibleInterval;
+//        private TimeInterval visibleInterval;
         private FilterProperty[] filterProperties;
         private Range range;
         private boolean keepNull = true;
 
-        public DynamicRangeFilter(TimelineController timelineController, DynamicController dynamicController, Column nodeColumn, Column edgeColumn) {
+        public DynamicRangeFilter(DynamicController dynamicController, Column nodeColumn, Column edgeColumn) {
             this.nodeColumn = nodeColumn;
             this.edgeColumn = edgeColumn;
             this.dynamicController = dynamicController;
             this.dynamicModel = dynamicController.getModel();
-            this.timelineController = timelineController;
         }
 
         public boolean init(Graph graph) {
             dynamicController.addModelListener(this);
-            visibleInterval = dynamicModel.getVisibleInterval();
+            visibleInterval = new Interval(dynamicModel.getMin(), dynamicModel.getMax());
+//            visibleInterval = dynamicModel.getVisibleInterval();
             return true;
         }
 
         public boolean evaluate(Graph graph, Node node) {
             if (nodeColumn != null) {
-                Object obj = node.getNodeData().getAttributes().getValue(nodeColumn.getIndex());
+//                Object obj = node.getNodeData().getAttributes().getValue(nodeColumn.getIndex());
+                Object obj = node.getAttribute(nodeColumn);
                 if (obj != null) {
-                    TimeInterval timeInterval = (TimeInterval) obj;
+                    Interval timeInterval = (Interval) obj;
+                    if (visibleInterval.getLow() <= obj && obj <= visibleInterval.getHigh()) {
+                        return true;
+                    }
                     return timeInterval.isInRange(visibleInterval.getLow(), visibleInterval.getHigh());
                 }
                 return keepNull;

@@ -302,10 +302,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>io-exporter-plugin</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>desktop-statistics</artifactId>
         </dependency>
+        -->
         <!--        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>filters-api</artifactId>
