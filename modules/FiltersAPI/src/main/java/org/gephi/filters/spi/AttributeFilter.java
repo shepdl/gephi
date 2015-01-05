@@ -55,7 +55,7 @@ import org.gephi.graph.api.Graph;
  * 
  * @author Mathieu Bastian
  */
-public interface ElementFilter extends Filter {
+public interface AttributeFilter extends Filter {
 
     public enum Type {
 

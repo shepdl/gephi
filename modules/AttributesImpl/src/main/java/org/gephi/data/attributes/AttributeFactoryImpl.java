@@ -48,9 +48,9 @@ import org.gephi.data.attributes.api.AttributeRowFactory;
 import org.gephi.data.attributes.api.AttributeType;
 import org.gephi.data.attributes.api.AttributeValue;
 import org.gephi.data.attributes.api.AttributeValueFactory;
-import org.gephi.graph.api.EdgeData;
+import org.gephi.graph.api.EdgeProperties;
 import org.gephi.graph.api.GraphView;
-import org.gephi.graph.api.NodeData;
+import org.gephi.graph.api.NodeProperties;
 
 /**
  *
@@ -89,11 +89,11 @@ public class AttributeFactoryImpl implements AttributeValueFactory, AttributeRow
         return new AttributeValueImpl((AttributeColumnImpl) column, managedValue);
     }
 
-    public AttributeRowImpl newNodeRow(NodeData nodeData) {
+    public AttributeRowImpl newNodeRow(NodeProperties nodeData) {
         return new AttributeRowImpl(model.getNodeTable(), nodeData);
     }
 
-    public AttributeRowImpl newEdgeRow(EdgeData edgeData) {
+    public AttributeRowImpl newEdgeRow(EdgeProperties edgeData) {
         return new AttributeRowImpl(model.getEdgeTable(), edgeData);
     }
 

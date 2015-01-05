@@ -187,6 +187,14 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>gephi-public</id>
+            <name>Gephi Public Repo</name>
+            <url>https://nexus.gephi.org/nexus/content/repositories/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <!-- Locations of the artifacts published -->

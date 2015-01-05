@@ -140,8 +140,10 @@ public class MASKBuilderEdge implements FilterBuilder {
 
             List<Edge> edgesToKeep = new ArrayList<Edge>();
             for (Edge e : mainGraph.getEdges().toArray()) {
-                Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
-                Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
+                Node source = e.getSource();
+//                Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
+//                Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
+                Node target = e.getTarget();
                 boolean keep = false;
                 switch (option) {
                     case SOURCE:
@@ -165,9 +167,12 @@ public class MASKBuilderEdge implements FilterBuilder {
             graph.clearEdges();
 
             for (Node n : mainGraph.getNodes().toArray()) {
-                if (n.getNodeData().getNode(hgraphView.getViewId()) == null) {
+                if (n != null) {
                     graph.addNode(n);
                 }
+//                if (n.getNodeData().getNode(hgraphView.getViewId()) == null) {
+//                    graph.addNode(n);
+//                }
             }
 
             for (Edge e : edgesToKeep) {
@@ -185,8 +190,10 @@ public class MASKBuilderEdge implements FilterBuilder {
                 NodeFilter filter = (NodeFilter) filters[0];
                 GraphView hgraphView = graph.getView();
                 for (Edge e : graph.getEdges().toArray()) {
-                    Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
-                    Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
+//                    Node source = e.getSource().getNodeData().getNode(hgraphView.getViewId());
+                    Node source = e.getSource();
+//                    Node target = e.getTarget().getNodeData().getNode(hgraphView.getViewId());
+                    Node target = e.getTarget();
                     boolean remove = false;
                     switch (option) {
                         case SOURCE:

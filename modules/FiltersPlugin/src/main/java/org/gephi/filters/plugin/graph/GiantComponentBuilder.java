@@ -43,7 +43,7 @@ package org.gephi.filters.plugin.graph;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
-import org.gephi.data.attributes.api.AttributeColumn;
+import org.gephi.attribute.api.Column;
 import org.gephi.data.attributes.api.AttributeController;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.filters.api.FilterLibrary;
@@ -53,7 +53,6 @@ import org.gephi.filters.spi.FilterBuilder;
 import org.gephi.filters.spi.FilterProperty;
 import org.gephi.filters.spi.NodeFilter;
 import org.gephi.graph.api.Graph;
-import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.UndirectedGraph;
 import org.gephi.statistics.plugin.ConnectedComponents;
@@ -99,21 +98,21 @@ public class GiantComponentBuilder implements FilterBuilder {
 
         private AttributeModel attributeModel;
         private int componentId;
-        private AttributeColumn column;
+        private Column column;
 
         public GiantComponentFilter() {
         }
 
         public boolean init(Graph graph) {
             ConnectedComponents cc = new ConnectedComponents();
-            HierarchicalUndirectedGraph undirectedGraph = null;
+            Graph undirectedGraph = null;
             if (cc instanceof UndirectedGraph) {
-                undirectedGraph = (HierarchicalUndirectedGraph) graph;
+                undirectedGraph = (Graph) graph;
             } else {
-                undirectedGraph = graph.getView().getGraphModel().getHierarchicalUndirectedGraph(graph.getView());
+                undirectedGraph = graph.getView().getGraphModel().getGraph(graph.getView());
             }
 
-            attributeModel = Lookup.getDefault().lookup(AttributeController.class).getModel(graph.getGraphModel().getWorkspace());
+            attributeModel = Lookup.getDefault().lookup(AttributeModel.class);
             cc.weaklyConnected(undirectedGraph, attributeModel);
             componentId = cc.getGiantComponent();
             column = attributeModel.getNodeTable().getColumn(ConnectedComponents.WEAKLY);
@@ -122,7 +121,7 @@ public class GiantComponentBuilder implements FilterBuilder {
         }
 
         public boolean evaluate(Graph graph, Node node) {
-            Integer component = (Integer) node.getNodeData().getAttributes().getValue(column.getIndex());
+            Integer component = (Integer) node.getAttribute(column);
             if (component != null) {
                 return component.equals(componentId);
             }
