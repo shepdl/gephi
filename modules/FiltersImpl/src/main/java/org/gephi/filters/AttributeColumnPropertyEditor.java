@@ -88,9 +88,9 @@ public class AttributeColumnPropertyEditor extends PropertyEditorSupport {
             AttributeModel model = Lookup.getDefault().lookup(AttributeModel.class);
             String[] arr = text.split("\\*-\\*");
             if (arr[0].equals("NODE")) {
-                column = model.getNodeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));
+                column = model.getEdgeTable().getColumn(arr[1]);
             } else if (arr[0].equals("EDGE")) {
-                column = model.getEdgeTable().getColumn(arr[1], AttributeType.valueOf(arr[2]));
+                column = model.getEdgeTable().getColumn(arr[1]);
             }
         }
     }

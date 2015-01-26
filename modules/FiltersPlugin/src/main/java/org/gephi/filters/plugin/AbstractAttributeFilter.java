@@ -58,7 +58,6 @@ public abstract class AbstractAttributeFilter extends AbstractFilter implements 
         super(name + " (" + column.getTitle() + ")");
         this.column = column;
         this.type = AttributeUtils.isNodeColumn(column) ? Type.NODE : Type.EDGE;
-        this.type = org.gephi.attribute.api.AttributeUtils.isNodeColumn(column) ? Type.NODE : Type.EDGE;
 
         //Add column property
         addProperty(Column.class, "column");

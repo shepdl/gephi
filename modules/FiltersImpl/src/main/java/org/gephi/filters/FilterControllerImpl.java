@@ -159,7 +159,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
 
             for (Query q : query.getDescendantsAndSelf()) {
                 Filter filter = q.getFilter();
-                if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof AttributeFilter) {
+                if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof ElementFilter) {
                     FilterProcessor filterProcessor = new FilterProcessor();
                     filterProcessor.init(filter, graph);
                 }
@@ -194,7 +194,7 @@ public class FilterControllerImpl implements FilterController, PropertyExecutor 
                 graph = graphModel.getGraph();
             }
             Filter filter = subQuery.getFilter();
-            if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof AttributeFilter) {
+            if (filter instanceof NodeFilter || filter instanceof EdgeFilter || filter instanceof ElementFilter) {
                 FilterProcessor filterProcessor = new FilterProcessor();
                 filterProcessor.init(filter, graph);
             }

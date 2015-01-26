@@ -249,7 +249,8 @@ public class TimelineControllerImpl implements TimelineController, DynamicModelL
             }
             if (!enabled) {
                 //Disable filtering
-                dynamicController.setVisibleInterval(new TimeInterval());
+                dynamicController.setVisibleInterval(Double.MIN_VALUE, Double.MAX_VALUE);
+//                dynamicController.setVisibleInterval(new TimeInterval());
             }
         }
     }
@@ -297,7 +298,7 @@ public class TimelineControllerImpl implements TimelineController, DynamicModelL
                     @Override
                     public void run() {
                         TimelineChart chart = null;
-                        Graph graph = Lookup.getDefault().lookup(GraphController.class).getModel().getGraphVisible();
+                        Graph graph = Lookup.getDefault().lookup(GraphController.class).getGraphModel()).getGraphVisible();
                         if (column != null) {
                             DynamicType type = (DynamicType) graph.getAttributes().getValue(column.getIndex());
                             if (type != null) {
